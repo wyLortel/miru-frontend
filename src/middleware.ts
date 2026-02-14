@@ -1,0 +1,25 @@
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+const protectedRoutes = ['/mypage', '/write', '/inquiry'];
+
+export function middleware(req: NextRequest) {
+  const pathname = req.nextUrl.pathname;
+
+  const isProtected = protectedRoutes.some((p) => pathname.startsWith(p));
+
+  /* ⭐ Spring 세션 쿠키 */
+
+  const session = req.cookies.get('JSESSIONID');
+
+  if (isProtected && !session) {
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+
+  return NextResponse.next();
+}
+
+// 특정 경로에 대해서만 미들웨어가 실행되도록 설정합니다
+export const config = {
+  matcher: ['/mypage/:path*', '/write/:path*', '/inquiry/:path*'],
+};
