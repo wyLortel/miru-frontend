@@ -1,19 +1,20 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { X, ChevronRight } from 'lucide-react';
 import { Logo } from '@/shared/ui/logo/Logo';
 import Link from 'next/link';
 
-export const MobileMenu = () => {
-  const router = useRouter();
+interface MobileMenuProps {
+  onClose: () => void;
+}
 
+export const MobileMenu = ({ onClose }: MobileMenuProps) => {
   return (
     <div className="flex min-h-screen w-full flex-col bg-white">
       <div className="flex h-20 items-center justify-between px-6 border-b">
         <Logo />
         <button
-          onClick={() => router.back()}
+          onClick={onClose}
           className="p-2  cursor-pointer"
           aria-label="닫기"
         >

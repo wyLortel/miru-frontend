@@ -4,6 +4,8 @@ import './globals.css';
 import TanStackProvider from './providers/TanStackProvider';
 import { AuthProvider } from './providers/AuthProvider';
 import { GlobalModal } from './providers/GlobalModal';
+import { Header } from './widgets/header/ui/Header';
+import { Footer } from './widgets/footer/ui/Footer';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,7 +34,9 @@ export default function RootLayout({
       >
         <TanStackProvider>
           <AuthProvider>
-            {children}
+            <Header />
+            <main>{children}</main>
+            <Footer />
             <GlobalModal />
           </AuthProvider>
         </TanStackProvider>
