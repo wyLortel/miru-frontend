@@ -1,25 +1,28 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 
 import { PostList } from '@/entities/post/ui/PostList';
-import { PostListSkeleton } from '@/entities/post/ui/PostCardSkeleton';
-import { MOCK_REGULAR_POSTS } from '@/entities/post/ui/PostCard';
+import { usePostsQuery } from '@/entities/post/model/usePostsQuery';
 import { SearchInput } from '@/features/post-search/ui/SearchInput';
 import { WriteButton } from '@/features/post-create/ui/WriteButton';
 import { CommonPagination } from '@/shared/ui/CommonPagination';
-import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
-import { usePagination } from '@/shared/lib/hooks/usePagination';
+import { useServerPagination } from '@/shared/lib/hooks/useServerPagination';
 import { Container } from '@/shared/ui/container';
 
 export function BoardMain() {
   const [search, setSearch] = useState('');
-  const { page, setPage, getPaginationData, goToNext, goToPrev } =
-    usePagination(10);
+  const [page, setPage] = useState(1);
 
-  // API 연결 후 totalCount는 서버 응답값으로 교체
-  const totalCount = MOCK_REGULAR_POSTS.length;
-  const { totalPages, pageNumbers } = getPaginationData(totalCount);
+  const { data } = usePostsQuery(page);
+  const posts = data?.posts ?? [];
+  const totalCount = data?.totalCount ?? 0;
+
+  const { totalPages, pageNumbers, goToNext, goToPrev } = useServerPagination(
+    page,
+    setPage,
+    totalCount,
+  );
 
   return (
     <Container>
@@ -34,11 +37,7 @@ export function BoardMain() {
 
         {/* 게시글 목록 */}
         <div className="mt-6">
-          <ErrorBoundary>
-            <Suspense fallback={<PostListSkeleton />}>
-              <PostList page={page} />
-            </Suspense>
-          </ErrorBoundary>
+          <PostList posts={posts} />
         </div>
 
         {/* 페이지네이션 */}
@@ -47,7 +46,7 @@ export function BoardMain() {
           totalPages={totalPages}
           pageNumbers={pageNumbers}
           onPageChange={setPage}
-          onNext={() => goToNext(totalPages)}
+          onNext={goToNext}
           onPrev={goToPrev}
         />
       </div>

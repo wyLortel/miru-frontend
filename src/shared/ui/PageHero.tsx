@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import Image from 'next/image';
 import { Container } from '@/shared/ui/container';
 
@@ -6,7 +7,7 @@ interface PageHeroProps {
   /** 강조(bold) 텍스트가 필요하면 ReactNode로 넘기세요.
    *  예) description={<>근본 있는 <strong>취준생</strong> 들의아지트</>}
    */
-  description: React.ReactNode;
+  description: ReactNode;
   imageSrc: string;
   imageAlt?: string;
 }

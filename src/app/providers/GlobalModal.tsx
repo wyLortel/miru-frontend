@@ -1,6 +1,6 @@
 'use client';
 
-import { Modal } from '../../shared/ui/model/Modal';
+import { Modal } from '../../shared/ui/modal/Modal';
 import { useModalStore } from '../store/useModalStore';
 
 export const GlobalModal = () => {

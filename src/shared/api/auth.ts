@@ -1,12 +1,18 @@
 import { apiClient } from './apiClient';
 
+export interface User {
+  id: number;
+  email: string;
+  nickname: string;
+}
+
 export const authApi = {
-  getMe: async () => {
-    const res = await apiClient.get('/me');
+  getMe: async (): Promise<User> => {
+    const res = await apiClient.get<User>('/me');
     return res.data;
   },
 
-  logout: async () => {
+  logout: async (): Promise<void> => {
     await apiClient.post('/logout');
   },
 };

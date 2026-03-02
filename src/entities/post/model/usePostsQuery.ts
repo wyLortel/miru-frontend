@@ -12,7 +12,7 @@ export const usePostsQuery = (page: number) => {
   return useQuery({
     queryKey: postQueryKeys.list(page),
     queryFn: () => postApi.getPosts(page),
-    // 페이지 전환 시 이전 데이터를 유지해 레이아웃 깜빡임 방지
     placeholderData: (prev) => prev,
+    staleTime: 1000 * 30, // 30초간 캐시 유지, 윈도우 포커스 재요청 방지
   });
 };

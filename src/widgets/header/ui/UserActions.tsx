@@ -11,14 +11,13 @@ export const UserActions = () => {
         로그인
       </Link>
 
-      <button className="hidden md:flex items-center justify-center p-1 point cursor-pointer">
+      <button className="flex items-center justify-center p-1 point cursor-pointer">
         <Bell size={24} strokeWidth={2} />
       </button>
 
       <button className="hidden md:flex items-center justify-center p-1 cursor-pointer">
         <User size={24} strokeWidth={2} />
       </button>
-
     </div>
   );
 };
