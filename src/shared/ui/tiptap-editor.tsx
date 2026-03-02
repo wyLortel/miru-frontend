@@ -117,7 +117,7 @@ export const TiptapEditor = ({
       attributes: {
         // ✅ p-10으로 여백을 더 넉넉하게 주어 박스와의 간격 확보
         class:
-          'prose prose-lg max-w-none focus:outline-none min-h-[50vh] text-[var(--color-foreground)] p-10',
+          'prose prose-base prose-h1:text-2xl prose-h2:text-xl max-w-none focus:outline-none min-h-[50vh] text-[var(--color-foreground)] p-10',
       },
     },
     immediatelyRender: false,
