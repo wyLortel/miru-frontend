@@ -10,6 +10,10 @@ interface PageHeroProps {
   description: ReactNode;
   imageSrc: string;
   imageAlt?: string;
+  /** 이미지 컨테이너 클래스 오버라이드. 기본값: 원형(rounded-full overflow-hidden) */
+  imageContainerClassName?: string;
+  /** Next.js Image 클래스 오버라이드. 기본값: object-cover */
+  imageClassName?: string;
 }
 
 export function PageHero({
@@ -17,6 +21,8 @@ export function PageHero({
   description,
   imageSrc,
   imageAlt = '',
+  imageContainerClassName,
+  imageClassName,
 }: PageHeroProps) {
   return (
     <section className="py-12">
@@ -33,12 +39,12 @@ export function PageHero({
           </div>
 
           {/* 이미지 영역 */}
-          <div className="relative size-52 shrink-0 overflow-hidden rounded-full bg-muted">
+          <div className={imageContainerClassName ?? 'relative size-52 shrink-0 overflow-hidden rounded-full bg-muted'}>
             <Image
               src={imageSrc}
               alt={imageAlt}
               fill
-              className="object-cover"
+              className={imageClassName ?? 'object-cover'}
               priority
             />
           </div>
