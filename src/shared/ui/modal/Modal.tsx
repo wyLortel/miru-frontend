@@ -74,6 +74,7 @@ export const Modal = ({
                 style={{ backgroundColor: btn.bgColor, color: btn.textColor }}
                 className={cn(
                   'flex-1 rounded-xl py-3 text-[16px] font-semibold transition-all active:scale-95',
+                  btn.bgColor === 'white' && 'border-2 border-gray-300',
                   !btn.bgColor &&
                     (btn.variant === 'secondary'
                       ? 'bg-gray-100 text-[#111827]'

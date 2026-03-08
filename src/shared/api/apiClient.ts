@@ -9,10 +9,12 @@ export const apiClient = axios.create({
 // 요청 인터셉터: XSRF 토큰을 헤더에 자동으로 추가
 apiClient.interceptors.request.use(
   (config) => {
-    const token = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('XSRF-TOKEN='))
-      ?.split('=')[1];
+    const token = typeof document !== 'undefined'
+      ? document.cookie
+          .split('; ')
+          .find((row) => row.startsWith('XSRF-TOKEN='))
+          ?.split('=')[1]
+      : undefined;
 
     if (token) {
       config.headers['X-XSRF-TOKEN'] = decodeURIComponent(token);

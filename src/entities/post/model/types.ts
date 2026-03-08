@@ -11,3 +11,24 @@ export interface Post {
   viewCount: number;
   createdAt: string;
 }
+
+export interface Reply {
+  id: number;
+  writer: string;
+  content: string;
+  createdAt: string;
+}
+
+export interface Comment {
+  id: number;
+  writer: string;
+  content: string;
+  createdAt: string;
+  replies: Reply[];
+}
+
+export interface PostDetail extends Post {
+  content: string;
+  isLiked: boolean;
+  comments: Comment[];
+}

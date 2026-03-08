@@ -8,13 +8,18 @@ export interface User {
   status: string;
 }
 
+interface ApiResponse<T> {
+  data: T;
+}
+
 export const authApi = {
   /** 현재 로그인 유저 정보 조회 - auth */
   getMe: async (): Promise<User> => {
-    const res = await apiClient.get<User>('/api/me');
-    return res.data;
+    const res = await apiClient.get<ApiResponse<User>>('/api/me');
+    return res.data.data;
   },
 
+  
   logout: async (): Promise<void> => {
     await apiClient.post('/logout');
   },

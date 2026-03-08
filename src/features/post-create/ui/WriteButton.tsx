@@ -1,15 +1,21 @@
-import Link from 'next/link';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
+import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
 
 export function WriteButton() {
+  const router = useRouter();
+  const { checkAuth } = useLoginRequired();
+
   return (
     <Button
       variant="default"
       size="default"
       className="cursor-pointer rounded-2xl px-6"
-      asChild
+      onClick={() => checkAuth(() => router.push('/board/write'))}
     >
-      <Link href="/board/write">글 쓰기</Link>
+      글 쓰기
     </Button>
   );
 }

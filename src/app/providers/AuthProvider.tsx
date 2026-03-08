@@ -12,7 +12,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const openModal = useModalStore((s) => s.openModal);
 
-  useAuth();
+  const { data: user } = useAuth();
+
+  // 로그인 감지 후 저장된 redirect URL로 이동
+  useEffect(() => {
+    if (user) {
+      const redirectUrl = localStorage.getItem('redirectAfterLogin');
+      if (redirectUrl) {
+        localStorage.removeItem('redirectAfterLogin');
+        router.push(redirectUrl);
+      }
+    }
+  }, [user, router]);
 
   useEffect(() => {
     const handler = () => {
