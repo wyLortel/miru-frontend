@@ -35,7 +35,9 @@ export function InquiryWriteForm() {
       queryClient.invalidateQueries({ queryKey: ['inquiries-all'] });
       router.push('/inquiry');
     } catch (error) {
-      const message = isAxiosError(error) ? error.response?.data?.message : undefined;
+      const message = isAxiosError(error)
+        ? error.response?.data?.message
+        : undefined;
       openModal({
         title: '등록 실패',
         description: message ?? '등록에 실패했습니다.',

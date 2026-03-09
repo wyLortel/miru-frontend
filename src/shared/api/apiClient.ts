@@ -4,28 +4,24 @@ import { APP_EVENTS } from '@/shared/lib/events';
 export const apiClient = axios.create({
   baseURL: '',
   withCredentials: true,
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
 });
 
-// 요청 인터셉터: XSRF 토큰을 헤더에 자동으로 추가
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = typeof document !== 'undefined'
-      ? document.cookie
-          .split('; ')
-          .find((row) => row.startsWith('XSRF-TOKEN='))
-          ?.split('=')[1]
-      : undefined;
+/* ⭐ XSRF 토큰 수동 주입 */
 
-    if (token) {
-      config.headers['X-XSRF-TOKEN'] = decodeURIComponent(token);
+apiClient.interceptors.request.use((config) => {
+  if (typeof document !== 'undefined') {
+    const xsrfToken = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('XSRF-TOKEN='))
+      ?.split('=')[1];
+    if (xsrfToken) {
+      config.headers['X-XSRF-TOKEN'] = decodeURIComponent(xsrfToken);
     }
-
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
+  }
+  return config;
+});
 
 /* ⭐ 세션 만료 자동 처리 */
 

@@ -26,7 +26,6 @@ export const useLoginRequired = () => {
         title: '로그인 필요',
         description: '로그인 후 이용 가능합니다.',
         buttons: [
-          { label: '닫기', onClick: closeModal, bgColor: 'white', textColor: '#111827' },
           { label: '로그인', onClick: () => {
             closeModal();
             router.push(loginUrl);

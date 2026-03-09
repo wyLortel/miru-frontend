@@ -3,16 +3,22 @@
 import Link from 'next/link';
 import { Bell, User } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/entities/auth/useAuth';
 import { authApi } from '@/shared/api/auth';
 
 export const UserActions = () => {
   const { data: user } = useAuth();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const handleLogout = async () => {
-    await authApi.logout();
-    queryClient.clear();
+    try {
+      await authApi.logout();
+    } finally {
+      queryClient.setQueryData(['auth', 'me'], null);
+      router.push('/login');
+    }
   };
 
   return (

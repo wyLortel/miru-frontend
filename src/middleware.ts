@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const protectedRoutes = ['/mypage', '/write', '/inquiry'];
+const protectedRoutes = ['/mypage', '/write'];
 
 export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
@@ -21,5 +21,5 @@ export function middleware(req: NextRequest) {
 
 // 특정 경로에 대해서만 미들웨어가 실행되도록 설정합니다
 export const config = {
-  matcher: ['/mypage/:path*', '/write/:path*', '/inquiry/:path*'],
+  matcher: ['/mypage/:path*', '/write/:path*'],
 };
