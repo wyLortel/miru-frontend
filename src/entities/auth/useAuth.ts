@@ -17,5 +17,7 @@ export function useAuth() {
     },
     retry: false,
     staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 }

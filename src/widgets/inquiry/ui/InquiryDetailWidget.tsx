@@ -7,14 +7,20 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchInquiryById } from '@/features/inquiry/model/api';
 import { InquiryDetailSection } from './InquiryDetailSection';
 import { useModalStore } from '@/app/store/useModalStore';
+import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
 
 // 1. 외부에서 사용하는 위젯 본체
 export const InquiryDetailWidget = ({ id }: { id: string }) => {
   const { openModal, closeModal } = useModalStore();
+  const { checkAuth } = useLoginRequired();
 
   return (
     <ErrorBoundary
       onError={(error) => {
+        if (isAxiosError(error) && error.response?.status === 401) {
+          checkAuth();
+          return;
+        }
         const message = isAxiosError(error) ? error.response?.data?.message : undefined;
         openModal({
           title: '불러오기 실패',

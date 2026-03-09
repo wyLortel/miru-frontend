@@ -7,9 +7,11 @@ import Link from 'next/link';
 import { InquiryList } from '@/features/inquiry/ui/InquiryList';
 import { Button } from '@/shared/ui/button';
 import { useModalStore } from '@/app/store/useModalStore';
+import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
 
 export const InquiryListSection = () => {
   const { openModal, closeModal } = useModalStore();
+  const { checkAuth } = useLoginRequired();
 
   return (
     <section className="w-full max-w-[800px] mx-auto">
@@ -20,6 +22,10 @@ export const InquiryListSection = () => {
       </div>
       <ErrorBoundary
         onError={(error) => {
+          if (isAxiosError(error) && error.response?.status === 401) {
+            checkAuth();
+            return;
+          }
           const message = isAxiosError(error) ? error.response?.data?.message : undefined;
           openModal({
             title: '불러오기 실패',
