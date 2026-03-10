@@ -13,6 +13,6 @@ export const usePostsQuery = (page: number) => {
     queryKey: postQueryKeys.list(page),
     queryFn: () => postApi.getPosts(page),
     placeholderData: (prev) => prev,
-    staleTime: 1000 * 30, // 30초간 캐시 유지, 윈도우 포커스 재요청 방지
+    staleTime: 0, // 캐시 즉시 만료 → 마운트/포커스 복귀 시마다 최신 데이터 fetch
   });
 };
