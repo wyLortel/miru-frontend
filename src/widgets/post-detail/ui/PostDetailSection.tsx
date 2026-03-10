@@ -7,6 +7,7 @@ import { LikeButton } from '@/features/post-like/ui/LikeButton';
 import { DeletePostButton } from '@/features/post-delete/ui/DeletePostButton';
 import { useAuth } from '@/entities/auth/useAuth';
 import { Button } from '@/shared/ui/button';
+import { sanitizeHtml } from '@/shared/lib/sanitize';
 
 interface PostDetailSectionProps {
   post: PostDetail;
@@ -46,7 +47,7 @@ export function PostDetailSection({ post, postId }: PostDetailSectionProps) {
       />
       <div
         className="prose prose-base prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-h2:font-bold prose-strong:font-bold max-w-none min-h-[200px] text-base leading-loose mb-10"
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
       />
       <div className="flex justify-start">
         <LikeButton

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/entities/auth/useAuth';
 import { PageHero } from '@/shared/ui/PageHero';
 import { AnalysisMain } from '@/widgets/analysis-main';
+import { isValidRedirectUrl } from '@/shared/lib/validateUrl';
 
 export default function AnalysisPage() {
   const router = useRouter();
@@ -14,9 +15,11 @@ export default function AnalysisPage() {
     if (user) {
       // 로그인 완료 시 localStorage에서 redirect URL 읽기
       const redirectUrl = localStorage.getItem('redirectAfterLogin');
-      if (redirectUrl) {
+      if (redirectUrl && isValidRedirectUrl(redirectUrl)) {
         localStorage.removeItem('redirectAfterLogin');
         router.push(redirectUrl);
+      } else if (redirectUrl) {
+        localStorage.removeItem('redirectAfterLogin');
       }
     }
   }, [user, router]);

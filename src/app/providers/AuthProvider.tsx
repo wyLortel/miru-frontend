@@ -6,6 +6,7 @@ import { useAuth } from '@/entities/auth/useAuth';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useModalStore, MODAL_PRIORITY } from '../store/useModalStore';
 import { APP_EVENTS } from '@/shared/lib/events';
+import { isValidRedirectUrl } from '@/shared/lib/validateUrl';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const qc = useQueryClient();
@@ -22,9 +23,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (user) {
       const redirectUrl = localStorage.getItem('redirectAfterLogin');
-      if (redirectUrl) {
+      if (redirectUrl && isValidRedirectUrl(redirectUrl)) {
         localStorage.removeItem('redirectAfterLogin');
         router.push(redirectUrl);
+      } else if (redirectUrl) {
+        localStorage.removeItem('redirectAfterLogin');
       }
     }
   }, [user, router]);

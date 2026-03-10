@@ -3,6 +3,7 @@ import { InquiryAdminAnswer } from './InquiryAdminAnswer';
 import { DeleteInquiryButton } from '@/features/inquiry/ui/DeleteInquiryButton';
 import { InquiryDetailItem } from '@/features/inquiry/model/types';
 import { formatDateTime } from '@/shared/lib/formatDate';
+import { sanitizeHtml } from '@/shared/lib/sanitize';
 
 export const InquiryDetailSection = ({
   data,
@@ -40,7 +41,7 @@ export const InquiryDetailSection = ({
       {/* 본문 내용 */}
       <div
         className="min-h-75 text-lg leading-loose mb-10 prose prose-base max-w-none"
-        dangerouslySetInnerHTML={{ __html: data.content }}
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.content) }}
       />
 
       {/* 운영자 답변 컴포넌트 */}

@@ -23,19 +23,28 @@ export const MobileMenu = ({ onClose }: MobileMenuProps) => {
       </div>
 
       <nav className="flex flex-col px-6 mt-4">
-        <MobileMenuItem href="/analysis" label="자기분석" />
-        <MobileMenuItem href="/about" label="자기분석이란?" />
-        <MobileMenuItem href="/board" label="게시판" />
-        <MobileMenuItem href="/mypage" label="마이페이지" />
-        <MobileMenuItem href="/contact" label="자기분석 팁" />
+        <MobileMenuItem href="/analysis" label="자기분석" onClose={onClose} />
+        <MobileMenuItem href="/about" label="자기분석이란?" onClose={onClose} />
+        <MobileMenuItem href="/board" label="커뮤니티" onClose={onClose} />
+        <MobileMenuItem href="/mypage" label="마이페이지" onClose={onClose} />
+        <MobileMenuItem href="/contact" label="자기분석 팁" onClose={onClose} />
       </nav>
     </div>
   );
 };
 
-const MobileMenuItem = ({ href, label }: { href: string; label: string }) => (
+const MobileMenuItem = ({
+  href,
+  label,
+  onClose,
+}: {
+  href: string;
+  label: string;
+  onClose: () => void;
+}) => (
   <Link
     href={href}
+    onClick={onClose}
     className="flex items-center justify-between py-5 border-b border-gray-100 group active:bg-gray-50"
   >
     <span className="text-xl font-bold text-gray-800 group-hover:text-main  transition-colors">

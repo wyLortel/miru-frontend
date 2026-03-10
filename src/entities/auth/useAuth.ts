@@ -16,7 +16,7 @@ export function useAuth() {
       }
     },
     retry: false,
-    staleTime: Infinity,
+    staleTime: 5 * 60 * 1000, // 5 minutes - allows periodic refresh from server
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
