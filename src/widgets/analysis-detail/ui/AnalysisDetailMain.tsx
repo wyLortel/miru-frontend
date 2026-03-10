@@ -60,6 +60,7 @@ function AnalysisDetailContent({ id }: Props) {
                   router.push('/analysis');
                 },
                 onError: (error) => {
+                  if (isAxiosError(error) && error.response?.status === 401) return;
                   const message = isAxiosError(error)
                     ? error.response?.data?.message
                     : undefined;
@@ -91,6 +92,7 @@ function AnalysisDetailContent({ id }: Props) {
             setMode('view');
           },
           onError: (error) => {
+            if (isAxiosError(error) && error.response?.status === 401) return;
             const message = isAxiosError(error)
               ? error.response?.data?.message
               : undefined;
@@ -211,6 +213,7 @@ export function AnalysisDetailMain({ id }: Props) {
   return (
     <ErrorBoundary
       onError={(error) => {
+        if (isAxiosError(error) && error.response?.status === 401) return;
         const message = isAxiosError(error)
           ? error.response?.data?.message
           : undefined;
