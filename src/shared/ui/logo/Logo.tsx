@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const Logo = () => {
   return (
-    <Link href="/">
+    <Link href="/analysis">
       <Image
         src="/miru_logo.png" // public/logo.png를 가리킵니다.
         alt="MIRU 로고"
