@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSyncExternalStore } from 'react';
 import { Heart } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { toggleLike } from '../model/api';
@@ -14,11 +15,20 @@ interface LikeButtonProps {
   isLiked: boolean;
 }
 
-export function LikeButton({ postId, likeCount, isLiked }: LikeButtonProps) {
+export function LikeButton({ postId, likeCount: initialLikeCount, isLiked: initialIsLiked }: LikeButtonProps) {
   const queryClient = useQueryClient();
   const { checkAuth } = useLoginRequired();
 
-  const { mutate } = useMutation({
+  // 캐시 변화를 구독해서, 캐시가 업데이트되면 즉시 리렌더링
+  const post = useSyncExternalStore(
+    (listener) => queryClient.getQueryCache().subscribe(listener),
+    () => queryClient.getQueryData<PostDetail>(['post', postId]) || { isLiked: initialIsLiked, likeCount: initialLikeCount }
+  );
+
+  const isLiked = post?.isLiked ?? initialIsLiked;
+  const likeCount = post?.likeCount ?? initialLikeCount;
+
+  const { mutate, isPending } = useMutation({
     mutationFn: () => toggleLike(postId),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['post', postId] });
@@ -35,8 +45,24 @@ export function LikeButton({ postId, likeCount, isLiked }: LikeButtonProps) {
 
       return { previous };
     },
-    onSuccess: () => {
-      // Optimistic update 완료 - 추가 처리 없음
+    onSuccess: (data) => {
+      queryClient.setQueryData<PostDetail>(['post', postId], (old) => {
+        if (!old) return data;
+
+        // undefined 값을 제외하고 merge (서버가 반환하지 않은 필드는 기존값 유지)
+        const cleanData = Object.fromEntries(
+          Object.entries(data || {}).filter(([, value]) => value !== undefined)
+        );
+
+        return { ...old, ...cleanData };
+      });
+    },
+    onSettled: () => {
+      // 백그라운드에서 서버 상태 재조회로 isLiked 최종 확정
+      queryClient.invalidateQueries({
+        queryKey: ['post', postId],
+        type: 'inactive'
+      });
     },
     onError: (_err, _vars, context) => {
       if (context?.previous) {
@@ -49,7 +75,7 @@ export function LikeButton({ postId, likeCount, isLiked }: LikeButtonProps) {
     <Button
       variant="outline"
       size="sm"
-      onClick={() => checkAuth(() => mutate())}
+      onClick={() => !isPending && checkAuth(() => mutate())}
       className={cn('cursor-pointer', isLiked && 'text-red-500 border-red-300')}
     >
       <Heart className={cn('size-4', isLiked && 'fill-red-500')} />

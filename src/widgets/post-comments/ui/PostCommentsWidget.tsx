@@ -34,6 +34,8 @@ function PostCommentsContent({ postId }: { postId: string }) {
   const { data: post } = useSuspenseQuery({
     queryKey: ['post', postId],
     queryFn: () => fetchPostById(postId),
+    refetchInterval: 30000,
+    refetchOnMount: 'always',
   });
 
   return <PostCommentsSection post={post} postId={postId} />;

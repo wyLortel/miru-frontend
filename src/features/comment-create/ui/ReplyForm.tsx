@@ -25,6 +25,8 @@ export function ReplyForm({ postId, parentId, mentionName }: ReplyFormProps) {
     onSuccess: () => {
       setContent('');
       setIsOpen(false);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['post', postId] });
     },
   });

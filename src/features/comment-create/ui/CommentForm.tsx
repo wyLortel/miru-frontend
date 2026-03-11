@@ -19,6 +19,8 @@ export function CommentForm({ postId }: CommentFormProps) {
     mutationFn: () => createComment(postId, content, null),
     onSuccess: () => {
       setContent('');
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['post', postId] });
     },
   });
