@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { AdminNavLink } from './AdminNavLink';
 
 export const Navigation = () => {
   return (
@@ -8,7 +9,7 @@ export const Navigation = () => {
       <NavLink href="/board">커뮤니티</NavLink>
       <NavLink href="/tips">자기분석 팁</NavLink>
       <NavLink href="/inquiry">1:1 문의</NavLink>
-      {/* test */}
+      <AdminNavLink />
     </nav>
   );
 };
