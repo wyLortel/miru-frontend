@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react'; // React 기본 기능 [cite: 2026-02-10]
+import { Suspense, useEffect } from 'react'; // React 기본 기능 [cite: 2026-02-10]
 import { isAxiosError } from 'axios';
 import { ErrorBoundary } from 'react-error-boundary';
 import Link from 'next/link';
@@ -11,7 +11,14 @@ import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
 
 export const InquiryListSection = () => {
   const { openModal, closeModal } = useModalStore();
-  const { checkAuth } = useLoginRequired();
+  const { checkAuth, user } = useLoginRequired();
+
+  useEffect(() => {
+    if (user === null) {
+      checkAuth();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <section className="w-full max-w-[800px] mx-auto">

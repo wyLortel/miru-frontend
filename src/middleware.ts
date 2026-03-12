@@ -19,7 +19,8 @@ export function middleware(req: NextRequest) {
   const session = req.cookies.get('JSESSIONID');
 
   if (isProtected && !session) {
-    return NextResponse.redirect(new URL('/login', req.url));
+    const redirectUrl = `/login?redirect=${encodeURIComponent(pathname)}`;
+    return NextResponse.redirect(new URL(redirectUrl, req.url));
   }
 
   return NextResponse.next();

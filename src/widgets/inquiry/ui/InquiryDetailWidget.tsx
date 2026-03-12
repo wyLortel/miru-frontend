@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { isAxiosError } from 'axios';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -12,7 +12,14 @@ import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
 // 1. 외부에서 사용하는 위젯 본체
 export const InquiryDetailWidget = ({ id }: { id: string }) => {
   const { openModal, closeModal } = useModalStore();
-  const { checkAuth } = useLoginRequired();
+  const { checkAuth, user } = useLoginRequired();
+
+  useEffect(() => {
+    if (user === null) {
+      checkAuth();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <ErrorBoundary
