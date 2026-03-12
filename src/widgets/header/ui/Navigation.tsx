@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
+import { AdminNavLink } from './AdminNavLink';
 
 export const Navigation = () => {
   const router = useRouter();
@@ -20,6 +21,8 @@ export const Navigation = () => {
       >
         1:1 문의
       </button>
+      <NavLink href="/inquiry">1:1 문의</NavLink>
+      <AdminNavLink />
     </nav>
   );
 };
