@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { Bell, User } from 'lucide-react';
+import { User } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/entities/auth/useAuth';
 import { authApi } from '@/shared/api/auth';
+import { AlarmBell } from './AlarmBell';
 import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
 
 export const UserActions = () => {
@@ -38,9 +39,7 @@ export const UserActions = () => {
         </Link>
       )}
 
-      <button className="flex items-center justify-center p-1 point cursor-pointer">
-        <Bell size={24} strokeWidth={2} />
-      </button>
+      <AlarmBell />
 
       <button
         className="hidden md:flex items-center justify-center p-1 cursor-pointer"
