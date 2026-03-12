@@ -21,7 +21,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 로그인 감지 후 저장된 redirect URL로 이동
   useEffect(() => {
+    if (user === null) {
+      // 로그아웃 시 다음 로그인에서 다시 리다이렉트할 수 있도록 초기화
+      sessionStorage.removeItem('adminRedirected');
+      return;
+    }
     if (user) {
+      if (user.role === 'ADMIN') {
+        localStorage.removeItem('redirectAfterLogin');
+        if (!sessionStorage.getItem('adminRedirected')) {
+          sessionStorage.setItem('adminRedirected', '1');
+          router.push('/admin/inquiries');
+        }
+        return;
+      }
       const redirectUrl = localStorage.getItem('redirectAfterLogin');
       if (redirectUrl && isValidRedirectUrl(redirectUrl)) {
         localStorage.removeItem('redirectAfterLogin');
