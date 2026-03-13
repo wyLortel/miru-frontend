@@ -22,11 +22,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 로그인 감지 후 저장된 redirect URL로 이동
   useEffect(() => {
     if (user === null) {
-      // 로그아웃 시 다음 로그인에서 다시 리다이렉트할 수 있도록 초기화
       sessionStorage.removeItem('adminRedirected');
       return;
     }
     if (user) {
+      // 약관 미동의 유저 → /terms 강제 이동
+      if (user.status === 'PENDING') {
+        router.push('/terms');
+        return;
+      }
+
+      // 탈퇴 계정 → 세션 만료 처리
+      if (user.status === 'DELETE') {
+        qc.setQueryData(['auth', 'me'], null);
+        openModal({
+          title: '탈퇴한 계정입니다',
+          description: '다시 로그인해주세요.',
+          priority: MODAL_PRIORITY.HIGH,
+          buttons: [
+            {
+              label: '확인',
+              onClick: () => {
+                closeModal();
+                router.push('/login');
+              },
+            },
+          ],
+        });
+        return;
+      }
+
       if (user.role === 'ADMIN') {
         localStorage.removeItem('redirectAfterLogin');
         if (!sessionStorage.getItem('adminRedirected')) {
@@ -43,7 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.removeItem('redirectAfterLogin');
       }
     }
-  }, [user, router]);
+  }, [user, router, qc, openModal, closeModal]);
 
   useEffect(() => {
     const handler = () => {
@@ -82,6 +107,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     window.addEventListener(APP_EVENTS.AUTH_LOGOUT, handler);
     return () => window.removeEventListener(APP_EVENTS.AUTH_LOGOUT, handler);
   }, [qc, openModal, closeModal, router, pathname, searchParams]);
+
+  // 403 "약관 동의 필요" → /terms 이동
+  useEffect(() => {
+    const handler = () => router.push('/terms');
+    window.addEventListener(APP_EVENTS.TERMS_REQUIRED, handler);
+    return () => window.removeEventListener(APP_EVENTS.TERMS_REQUIRED, handler);
+  }, [router]);
+
+  // 403 "정지된 계정" → 모달 표시 (이동 없음)
+  useEffect(() => {
+    const handler = () => {
+      openModal({
+        title: '정지된 계정입니다',
+        description: '계정이 정지되어 해당 기능을 이용할 수 없습니다.',
+        buttons: [{ label: '확인', onClick: closeModal }],
+      });
+    };
+    window.addEventListener(APP_EVENTS.ACCOUNT_BANNED, handler);
+    return () => window.removeEventListener(APP_EVENTS.ACCOUNT_BANNED, handler);
+  }, [openModal, closeModal]);
 
   return <>{children}</>;
 }
