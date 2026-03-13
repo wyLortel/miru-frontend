@@ -1,9 +1,19 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const protectedRoutes = ['/mypage', '/write', '/board/:id/edit', '/inquiry/write', '/about-analysis', '/admin'];
+const protectedRoutes = [
+  '/mypage',
+  '/write',
+  '/board/:id/edit',
+  '/inquiry/write',
+  '/about-analysis',
+  '/admin',
+  '/terms',
+];
 
 export function middleware(req: NextRequest) {
+  if (process.env.NODE_ENV === 'development') return NextResponse.next();
+
   const pathname = req.nextUrl.pathname;
 
   const isProtected = protectedRoutes.some((p) => {
@@ -28,5 +38,13 @@ export function middleware(req: NextRequest) {
 
 // 특정 경로에 대해서만 미들웨어가 실행되도록 설정합니다
 export const config = {
-  matcher: ['/mypage/:path*', '/write/:path*', '/board/:id/edit', '/inquiry/:path*', '/about-analysis/:path*', '/admin/:path*'],
+  matcher: [
+    '/mypage/:path*',
+    '/write/:path*',
+    '/board/:id/edit',
+    '/inquiry/:path*',
+    '/about-analysis/:path*',
+    '/admin/:path*',
+    '/terms',
+  ],
 };
