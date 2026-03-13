@@ -146,8 +146,8 @@ export function AdminUsersContent() {
                         openModal({
                           title: '정말로 정지 시키겠습니까?',
                           buttons: [
-                            { label: '취소', onClick: closeModal },
-                            { label: '네', onClick: () => { closeModal(); updateStatus(user.id); } },
+                            { label: '취소', onClick: closeModal, bgColor: 'white', textColor: '#111827' },
+                            { label: '정지', onClick: () => { closeModal(); updateStatus(user.id); }, bgColor: '#ef4444', textColor: 'white' },
                           ],
                         })
                       }
