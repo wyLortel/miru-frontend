@@ -117,15 +117,12 @@ function AnalysisDetailContent({ id }: Props) {
           {mode === 'edit' ? (
             <div className="flex items-start gap-3 shrink-0">
               <div className="flex flex-col gap-1">
-                <Link
-                  href="/tips"
-                  className="text-[var(--color-main)] font-bold text-sm hover:underline"
-                >
+                <span className="text-[var(--color-main)] font-bold text-sm">
                   필독
-                </Link>
-                <span className="text-sm font-medium text-gray-600">
-                  자기분석 팁 바로 읽기!
                 </span>
+                <Link href="/tips" className="text-sm font-medium text-gray-600 hover:underline">
+                  자기분석 팁 바로 읽기!
+                </Link>
               </div>
               <Image
                 src="/assets/images/tip-character.png"

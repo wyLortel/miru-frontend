@@ -65,7 +65,7 @@ export function AdminInquiryDetailContent({ id }: Props) {
     openModal({
       title: '정말로 답변을 보내시겠습니까?',
       buttons: [
-        { label: '취소', onClick: closeModal },
+        { label: '취소', onClick: closeModal, bgColor: 'white', textColor: '#111827' },
         {
           label: '확인',
           onClick: () => {
@@ -140,8 +140,8 @@ export function AdminInquiryDetailContent({ id }: Props) {
               openModal({
                 title: '정말로 답변을 삭제하시겠습니까?',
                 buttons: [
-                  { label: '취소', onClick: closeModal },
-                  { label: '확인', onClick: () => { closeModal(); deleteAnswer(); } },
+                  { label: '취소', onClick: closeModal, bgColor: 'white', textColor: '#111827' },
+                  { label: '삭제', onClick: () => { closeModal(); deleteAnswer(); }, bgColor: '#ef4444', textColor: 'white' },
                 ],
               })
             }
