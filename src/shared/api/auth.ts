@@ -20,6 +20,10 @@ export const authApi = {
   },
 
   
+  agreeTerms: async (): Promise<void> => {
+    await apiClient.post('/api/agreements');
+  },
+
   logout: async (): Promise<void> => {
     await apiClient.post('/api/logout');
   },

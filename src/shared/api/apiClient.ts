@@ -33,6 +33,15 @@ apiClient.interceptors.response.use(
       window.dispatchEvent(new Event(APP_EVENTS.AUTH_LOGOUT));
     }
 
+    if (err.response?.status === 403) {
+      const message = err.response?.data?.message ?? '';
+      if (message.includes('약관 동의')) {
+        window.dispatchEvent(new Event(APP_EVENTS.TERMS_REQUIRED));
+      } else if (message.includes('정지')) {
+        window.dispatchEvent(new Event(APP_EVENTS.ACCOUNT_BANNED));
+      }
+    }
+
     return Promise.reject(err);
   },
 );
