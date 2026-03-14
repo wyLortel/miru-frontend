@@ -52,7 +52,13 @@ function AnalysisDetailContent({ id }: Props) {
         description: '정말로 초기화 하시겠습니까?',
         buttons: [
           {
-            label: '네',
+            label: '아니오',
+            onClick: closeModal,
+            bgColor: 'white',
+            textColor: '#111827',
+          },
+          {
+            label: '초기화',
             onClick: () => {
               closeModal();
               deleteAnswer(undefined, {
@@ -72,10 +78,8 @@ function AnalysisDetailContent({ id }: Props) {
                 },
               });
             },
-          },
-          {
-            label: '아니오',
-            onClick: closeModal,
+            bgColor: '#ef4444',
+            textColor: 'white',
           },
         ],
       });
@@ -194,10 +198,12 @@ function AnalysisDetailContent({ id }: Props) {
             </div>
           </>
         ) : (
-          <div
-            className="prose prose-base max-w-none text-foreground"
-            dangerouslySetInnerHTML={{ __html: sanitizeHtml(viewContent) }}
-          />
+          <div className="w-full border border-[var(--color-border)] rounded-lg overflow-hidden bg-white">
+            <div
+              className="prose prose-base prose-h1:text-2xl prose-h2:text-xl max-w-none text-[var(--color-foreground)] p-10 min-h-[50vh] overflow-y-auto"
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(viewContent) }}
+            />
+          </div>
         )}
       </div>
     </Container>
