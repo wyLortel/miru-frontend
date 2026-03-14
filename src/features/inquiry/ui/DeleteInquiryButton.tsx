@@ -26,7 +26,7 @@ export const DeleteInquiryButton = ({ id }: { id: string }) => {
               await deleteInquiry(id);
               queryClient.invalidateQueries({ queryKey: ['inquiries-all'] });
               closeModal();
-              router.push('/inquiry'); // 삭제 후 목록으로 이동 [cite: 2026-02-10]
+              router.push('/inquiries'); // 삭제 후 목록으로 이동 [cite: 2026-02-10]
             } catch (error) {
               const message = isAxiosError(error) ? error.response?.data?.message : undefined;
               openModal({

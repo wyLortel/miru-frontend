@@ -16,7 +16,7 @@ export const Navigation = () => {
       <NavLink href="/about">자기분석이란?</NavLink>
       <NavLink href="/tips">자기분석 팁</NavLink>
       <button
-        onClick={() => checkAuth(() => router.push('/inquiry'))}
+        onClick={() => checkAuth(() => router.push('/inquiries'))}
         className="font-bold leading-none hover:text-blue-600 transition-colors cursor-pointer"
       >
         1:1 문의

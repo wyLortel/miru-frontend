@@ -41,8 +41,9 @@ export const MobileMenu = ({ onClose }: MobileMenuProps) => {
       <nav className="flex flex-col px-6 mt-4">
         <MobileMenuItem href="/analysis" label="자기분석" onClose={onClose} />
         <MobileMenuItem href="/about" label="자기분석이란?" onClose={onClose} />
-        <MobileMenuItem href="/contact" label="자기분석 팁" onClose={onClose} />
+        <MobileMenuItem href="/tips" label="자기분석 팁" onClose={onClose} />
         <MobileMenuItem href="/boards" label="커뮤니티" onClose={onClose} />
+        <MobileMenuItem href="/inquiries" label="1:1 문의" onClose={onClose} />
         <MobileMenuItem href="/mypage" label="마이페이지" onClose={onClose} />
 
         {/* 로그인/로그아웃 */}

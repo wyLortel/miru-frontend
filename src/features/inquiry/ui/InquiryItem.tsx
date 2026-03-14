@@ -19,7 +19,7 @@ export const InquiryItem = ({ id, title, createdAt, status }: Inquiry) => {
 
   // 2. 클릭 시 상세 페이지로 이동하는 함수
   const handleClick = () => {
-    router.push(`/inquiry/${id}`); // 예: /inquiry/123 주소로 이동
+    router.push(`/inquiries/${id}`); // 예: /inquiries/123 주소로 이동
   };
 
   return (

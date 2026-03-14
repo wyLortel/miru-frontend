@@ -33,7 +33,7 @@ export function InquiryWriteForm() {
     try {
       await createInquiry({ title, content });
       queryClient.invalidateQueries({ queryKey: ['inquiries-all'] });
-      router.push('/inquiry');
+      router.push('/inquiries');
     } catch (error) {
       const message = isAxiosError(error)
         ? error.response?.data?.message
