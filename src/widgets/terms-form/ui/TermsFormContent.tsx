@@ -46,7 +46,9 @@ function TermsSection({ title, content, checked, label, onCheck }: TermsSectionP
         className="flex items-center gap-2 cursor-pointer"
         onClick={onCheck}
       >
-        <Checkbox checked={checked} onCheck={onCheck} />
+        <span onClick={(e) => e.stopPropagation()}>
+          <Checkbox checked={checked} onCheck={onCheck} />
+        </span>
         <span className="text-sm font-medium text-[#191919]">{label} (필수)</span>
       </div>
     </div>
@@ -67,6 +69,7 @@ export function TermsFormContent() {
     },
     onError: (err) => {
       if (isAxiosError(err) && err.response?.status === 401) return;
+      if (isAxiosError(err) && err.response?.status === 403) return;
       const message = isAxiosError(err) ? err.response?.data?.message : undefined;
       openModal({
         title: '약관 동의 실패',

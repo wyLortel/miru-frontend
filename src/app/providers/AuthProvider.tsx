@@ -108,12 +108,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener(APP_EVENTS.AUTH_LOGOUT, handler);
   }, [qc, openModal, closeModal, router, pathname, searchParams]);
 
-  // 403 "약관 동의 필요" → /terms 이동
+  // 403 "약관 동의 필요" → /terms 이동 (이미 /terms이면 생략)
   useEffect(() => {
-    const handler = () => router.push('/terms');
+    const handler = () => {
+      if (!pathname?.startsWith('/terms')) router.push('/terms');
+    };
     window.addEventListener(APP_EVENTS.TERMS_REQUIRED, handler);
     return () => window.removeEventListener(APP_EVENTS.TERMS_REQUIRED, handler);
-  }, [router]);
+  }, [router, pathname]);
 
   // 403 "정지된 계정" → 모달 표시 (이동 없음)
   useEffect(() => {
