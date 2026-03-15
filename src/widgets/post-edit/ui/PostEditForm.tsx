@@ -45,7 +45,7 @@ export function PostEditForm({ postId }: PostEditFormProps) {
       { title, content },
       {
         onSuccess: () => {
-          router.push(`/boards/${postId}`);
+          router.replace(`/boards/${postId}`);
         },
         onError: (error) => {
           const message = isAxiosError(error)

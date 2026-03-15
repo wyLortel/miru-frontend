@@ -33,7 +33,7 @@ export function PostWriteForm() {
       { title, content },
       {
         onSuccess: (post) => {
-          router.push(`/boards/${post.id}`);
+          router.replace(`/boards/${post.id}`);
         },
         onError: (error) => {
           const message = isAxiosError(error)
