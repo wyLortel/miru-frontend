@@ -6,7 +6,10 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useAnalysisQuery } from '@/entities/analysis/model/useAnalysisQuery';
 import { AnalysisCard } from '@/entities/analysis/ui/AnalysisCard';
 import { AnalysisListSkeleton } from '@/entities/analysis/ui/AnalysisCardSkeleton';
-import { AnalysisFilterTabs, type FilterTab } from '@/features/analysis-filter/ui/AnalysisFilterTabs';
+import {
+  AnalysisFilterTabs,
+  type FilterTab,
+} from '@/features/analysis-filter/ui/AnalysisFilterTabs';
 import { CommonPagination } from '@/shared/ui/CommonPagination';
 import { usePagination } from '@/shared/lib/hooks/usePagination';
 import { useModalStore } from '@/app/store/useModalStore';
@@ -14,8 +17,10 @@ import type { AnalysisItem } from '@/entities/analysis/model/types';
 
 function filterItems(items: AnalysisItem[], tab: FilterTab): AnalysisItem[] {
   if (tab === 'ALL') return items;
-  if (tab === 'NOT_WRITTEN') return items.filter((item) => item.status === null);
-  if (tab === 'COMPLETED') return items.filter((item) => item.status === 'COMPLETED');
+  if (tab === 'NOT_WRITTEN')
+    return items.filter((item) => item.status === null);
+  if (tab === 'COMPLETED')
+    return items.filter((item) => item.status === 'COMPLETED');
   return items.filter((item) => item.status === 'IN_PROGRESS');
 }
 
@@ -33,9 +38,8 @@ function AnalysisContent() {
     inProgress: allItems.filter((i) => i.status === 'IN_PROGRESS').length,
   };
 
-  const { page, setPage, totalPages, pageNumbers, goToNext, goToPrev } = usePagination(
-    filteredItems.length,
-  );
+  const { page, setPage, totalPages, pageNumbers, goToNext, goToPrev } =
+    usePagination(filteredItems.length);
 
   useEffect(() => {
     setPage(1);
@@ -54,7 +58,7 @@ function AnalysisContent() {
 
       {currentItems.length > 0 ? (
         <>
-          <div className="flex flex-col gap-3 mb-10">
+          <div className="flex flex-col gap-5 md:gap-3 mb-6 md:mb-10 px-4 md:px-0">
             {currentItems.map((item) => (
               <AnalysisCard key={item.id} id={item.id} content={item.content} />
             ))}
@@ -86,7 +90,9 @@ export function AnalysisMain() {
     <div className="mt-10">
       <ErrorBoundary
         onError={(error) => {
-          const message = isAxiosError(error) ? error.response?.data?.message : undefined;
+          const message = isAxiosError(error)
+            ? error.response?.data?.message
+            : undefined;
           openModal({
             title: '불러오기 실패',
             description: message ?? '자기분석 질문을 불러오지 못했습니다.',

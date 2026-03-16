@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
+import { useIsActive } from '../lib/useIsActive';
 import { AdminNavLink } from './AdminNavLink';
 
 export const Navigation = () => {
@@ -10,7 +11,7 @@ export const Navigation = () => {
   const { checkAuth } = useLoginRequired();
 
   return (
-    <nav className="hidden md:flex items-center gap-8">
+    <nav className="hidden md:flex items-center gap-6">
       <NavLink href="/analysis">자기분석</NavLink>
       <NavLink href="/boards">커뮤니티</NavLink>
       <NavLink href="/about">자기분석이란?</NavLink>
@@ -33,11 +34,17 @@ const NavLink = ({
 }: {
   href: string;
   children: React.ReactNode;
-}) => (
-  <Link
-    href={href}
-    className=" font-bold leading-none hover:text-blue-600 transition-colors"
-  >
-    {children}
-  </Link>
-);
+}) => {
+  const isActive = useIsActive(href);
+
+  return (
+    <Link
+      href={href}
+      className={`font-bold leading-none transition-colors ${
+        isActive ? 'text-primary' : 'hover:text-blue-600'
+      }`}
+    >
+      {children}
+    </Link>
+  );
+};

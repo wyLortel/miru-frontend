@@ -16,7 +16,7 @@ export function AnalysisCard({ id, content }: Props) {
       onClick={() => router.push(`/analysis/${id}`)}
     >
       <CardContent className="py-5">
-        <p className="text-sm text-foreground">{content}</p>
+        <p className="text-sm text-foreground font-bold">{content}</p>
       </CardContent>
     </Card>
   );

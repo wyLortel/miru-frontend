@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export const LoginHero = () => {
   return (
-    <div className="flex flex-col items-center mb-20 mt-20">
+    <div className="flex flex-col items-center mb-60 mt-20">
       <Image
         src="/assets/images/miru-login-logo.png"
         alt="MIRU 로그인 로고"

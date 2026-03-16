@@ -1,64 +1,40 @@
 'use client';
 
-import { X, ChevronRight } from 'lucide-react';
-import { Logo } from '@/shared/ui/logo/Logo';
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import { useAuth } from '@/entities/auth/useAuth';
-import { useRouter } from 'next/navigation';
+import { useIsActive } from '@/widgets/header/lib/useIsActive';
+import { MobileMenuHeader } from './MobileMenuHeader';
+import { MobileMenuAuth } from './MobileMenuAuth';
 
 interface MobileMenuProps {
   onClose: () => void;
 }
 
+const MENU_ITEMS = [
+  { href: '/analysis', label: '자기분석' },
+  { href: '/about', label: '자기분석이란?' },
+  { href: '/tips', label: '자기분석 팁' },
+  { href: '/boards', label: '커뮤니티' },
+  { href: '/inquiries', label: '1:1 문의' },
+  { href: '/mypage', label: '마이페이지' },
+];
+
 export const MobileMenu = ({ onClose }: MobileMenuProps) => {
-  const { data: user } = useAuth();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    const { authApi } = await import('@/shared/api/auth');
-    const { useQueryClient } = await import('@tanstack/react-query');
-    try {
-      await authApi.logout();
-    } finally {
-      router.push('/login');
-      onClose();
-    }
-  };
-
   return (
     <div className="flex min-h-screen w-full flex-col bg-white">
-      <div className="flex h-20 items-center justify-between px-6 border-b">
-        <Logo />
-        <button
-          onClick={onClose}
-          className="p-2  cursor-pointer"
-          aria-label="닫기"
-        >
-          <X size={32} strokeWidth={1.5} />
-        </button>
-      </div>
+      <MobileMenuHeader onClose={onClose} />
 
       <nav className="flex flex-col px-6 mt-4">
-        <MobileMenuItem href="/analysis" label="자기분석" onClose={onClose} />
-        <MobileMenuItem href="/about" label="자기분석이란?" onClose={onClose} />
-        <MobileMenuItem href="/tips" label="자기분석 팁" onClose={onClose} />
-        <MobileMenuItem href="/boards" label="커뮤니티" onClose={onClose} />
-        <MobileMenuItem href="/inquiries" label="1:1 문의" onClose={onClose} />
-        <MobileMenuItem href="/mypage" label="마이페이지" onClose={onClose} />
+        {MENU_ITEMS.map((item) => (
+          <MobileMenuItem
+            key={item.href}
+            href={item.href}
+            label={item.label}
+            onClose={onClose}
+          />
+        ))}
 
-        {/* 로그인/로그아웃 */}
-        <div className="border-t border-gray-100 mt-4 pt-4">
-          {user ? (
-            <button
-              onClick={handleLogout}
-              className="w-full text-left py-5 text-xl font-bold text-gray-800 hover:text-main transition-colors"
-            >
-              로그아웃
-            </button>
-          ) : (
-            <MobileMenuItem href="/login" label="로그인" onClose={onClose} />
-          )}
-        </div>
+        <MobileMenuAuth onClose={onClose} />
       </nav>
     </div>
   );
@@ -72,15 +48,30 @@ const MobileMenuItem = ({
   href: string;
   label: string;
   onClose: () => void;
-}) => (
-  <Link
-    href={href}
-    onClick={onClose}
-    className="flex items-center justify-between py-5 border-b border-gray-100 group active:bg-gray-50"
-  >
-    <span className="text-xl font-bold text-gray-800 group-hover:text-main  transition-colors">
-      {label}
-    </span>
-    <ChevronRight size={24} className="text-gray-400 group-hover:text-main " />
-  </Link>
-);
+}) => {
+  const isActive = useIsActive(href);
+
+  return (
+    <Link
+      href={href}
+      onClick={onClose}
+      className="flex items-center justify-between py-5 border-b border-gray-100 group active:bg-gray-50"
+    >
+      <span
+        className={`text-xl font-bold transition-colors ${
+          isActive
+            ? 'text-primary'
+            : 'text-gray-800 group-hover:text-main'
+        }`}
+      >
+        {label}
+      </span>
+      <ChevronRight
+        size={24}
+        className={`transition-colors ${
+          isActive ? 'text-primary' : 'text-gray-400 group-hover:text-main'
+        }`}
+      />
+    </Link>
+  );
+};

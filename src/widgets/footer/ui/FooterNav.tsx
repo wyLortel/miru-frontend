@@ -13,7 +13,7 @@ export const FooterNav = () => {
       {isMyPage && <WithdrawButton />}
       <FooterLink href="/terms/service">이용약관</FooterLink>
       <FooterLink href="/terms/privacy">개인정보동의</FooterLink>
-      <FooterLink href="/contact">고객문의</FooterLink>
+      <FooterLink href="/inquiries">고객문의</FooterLink>
     </nav>
   );
 };

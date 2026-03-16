@@ -22,7 +22,7 @@ export const Header = () => {
         }`}
       >
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-          <div className="flex items-center gap-10">
+          <div className="flex items-center gap-6">
             <div className="flex items-center mb-1">
               <Logo />
             </div>
