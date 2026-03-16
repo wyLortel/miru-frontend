@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Button } from '@/shared/ui/button';
 import { Container } from '@/shared/ui/container';
 
 export function AboutAnalysisEmphasis() {
@@ -23,15 +24,12 @@ export function AboutAnalysisEmphasis() {
               </strong>
               를 마련하는 과정입니다.
             </p>
-            <Link
-              href="/tips"
-              className="mt-8 inline-flex items-center gap-2 hover:opacity-80 transition-opacity"
-            >
-              <span className="text-primary font-bold text-lg">필독</span>
-              <span className="text-foreground font-bold text-lg">
-                자기분석 팁 바로 읽기!
-              </span>
-            </Link>
+            <Button asChild className="mt-8">
+              <Link href="/tips">
+                <span className="font-bold text-lg">필독</span>
+                <span className="font-bold text-lg">자기분석 팁 바로 읽기!</span>
+              </Link>
+            </Button>
         </div>
       </Container>
     </section>
