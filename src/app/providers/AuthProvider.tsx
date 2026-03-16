@@ -111,7 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 403 "약관 동의 필요" → /terms 이동 (이미 /terms이면 생략)
   useEffect(() => {
     const handler = () => {
-      if (!pathname?.startsWith('/terms')) router.push('/terms');
+      if (!window.location.pathname.startsWith('/terms')) router.push('/terms');
     };
     window.addEventListener(APP_EVENTS.TERMS_REQUIRED, handler);
     return () => window.removeEventListener(APP_EVENTS.TERMS_REQUIRED, handler);
