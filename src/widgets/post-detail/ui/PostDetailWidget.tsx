@@ -1,33 +1,20 @@
 'use client';
 
 import { Suspense } from 'react';
-import { isAxiosError } from 'axios';
-import { ErrorBoundary } from 'react-error-boundary';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchPostById } from '@/entities/post/model/api';
 import { postQueryKeys } from '@/entities/post/model/usePostsQuery';
-import { useModalStore } from '@/app/store/useModalStore';
 import { PostDetailSection } from './PostDetailSection';
+import { PostDetailSkeleton } from './PostDetailSkeleton';
+import { ErrorBoundaryWrapper } from '@/shared/ui/ErrorBoundaryWrapper';
 
 export function PostDetailWidget({ postId }: { postId: string }) {
-  const { openModal, closeModal } = useModalStore();
-
   return (
-    <ErrorBoundary
-      onError={(error) => {
-        const message = isAxiosError(error) ? error.response?.data?.message : undefined;
-        openModal({
-          title: '불러오기 실패',
-          description: message ?? '게시글을 불러오지 못했습니다.',
-          buttons: [{ label: '확인', onClick: closeModal }],
-        });
-      }}
-      fallback={<div />}
-    >
-      <Suspense fallback={<div className="py-20 text-center text-gray-400">불러오는 중...</div>}>
+    <ErrorBoundaryWrapper errorMessage="게시글을 불러오지 못했습니다." redirectTo="/boards">
+      <Suspense fallback={<PostDetailSkeleton />}>
         <PostDetailContent postId={postId} />
       </Suspense>
-    </ErrorBoundary>
+    </ErrorBoundaryWrapper>
   );
 }
 
@@ -37,6 +24,7 @@ function PostDetailContent({ postId }: { postId: string }) {
     queryFn: () => fetchPostById(postId),
     staleTime: 0,
     refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 
   return <PostDetailSection post={post} postId={postId} />;

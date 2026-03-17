@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 import { postApi } from '@/entities/post/api/postApi';
 
@@ -16,5 +16,18 @@ export const usePostsQuery = (page: number) => {
     placeholderData: (prev) => prev,
     staleTime: 0,
     refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchInterval: 30_000,
+  });
+};
+
+export const useSuspensePostsQuery = (page: number) => {
+  return useSuspenseQuery({
+    queryKey: postQueryKeys.list(page),
+    queryFn: () => postApi.getPosts(page),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchInterval: 30_000,
   });
 };

@@ -1,41 +1,80 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
 import { PostList } from '@/entities/post/ui/PostList';
+import { PostListSkeleton } from '@/entities/post/ui/PostCardSkeleton';
 import { postApi } from '@/entities/post/api/postApi';
-import { usePostsQuery } from '@/entities/post/model/usePostsQuery';
+import { useSuspensePostsQuery } from '@/entities/post/model/usePostsQuery';
 import { SearchInput } from '@/features/post-search/ui/SearchInput';
 import { WriteButton } from '@/features/post-create/ui/WriteButton';
 import { CommonPagination } from '@/shared/ui/CommonPagination';
 import { Container } from '@/shared/ui/container';
+import { ErrorBoundaryWrapper } from '@/shared/ui/ErrorBoundaryWrapper';
 
 export function BoardMain() {
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState(searchParams.get('keyword') || '');
+  const [page, setPage] = useState(parseInt(searchParams.get('page') || '1', 10));
+
+  return (
+    <ErrorBoundaryWrapper errorMessage="게시글을 불러오지 못했습니다." redirectTo="/">
+      <Suspense
+        fallback={
+          <Container>
+            <div className="w-full py-8">
+              <PostListSkeleton />
+            </div>
+          </Container>
+        }
+      >
+        <BoardMainContent
+          search={search}
+          setSearch={setSearch}
+          searchKeyword={searchKeyword}
+          setSearchKeyword={setSearchKeyword}
+          page={page}
+          setPage={setPage}
+        />
+      </Suspense>
+    </ErrorBoundaryWrapper>
+  );
+}
+
+function BoardMainContent({
+  search,
+  setSearch,
+  searchKeyword,
+  setSearchKeyword,
+  page,
+  setPage,
+}: {
+  search: string;
+  setSearch: (s: string) => void;
+  searchKeyword: string;
+  setSearchKeyword: (s: string) => void;
+  page: number;
+  setPage: (p: number) => void;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [search, setSearch] = useState('');
-
-  // URL에서 검색 파라미터 읽기
-  const urlKeyword = searchParams.get('keyword') || '';
-  const urlPage = parseInt(searchParams.get('page') || '1', 10);
-
-  const [searchKeyword, setSearchKeyword] = useState(urlKeyword);
-  const [page, setPage] = useState(urlPage);
-
   // URL 변경 시 상태 동기화
   useEffect(() => {
+    const urlKeyword = searchParams.get('keyword') || '';
+    const urlPage = parseInt(searchParams.get('page') || '1', 10);
     setSearchKeyword(urlKeyword);
     setPage(urlPage);
     setSearch(urlKeyword);
-  }, [urlKeyword, urlPage]);
+  }, [searchParams, setSearchKeyword, setPage, setSearch]);
 
   // 검색 여부에 따라 다른 API 호출
   const isSearching = searchKeyword.trim() !== '';
 
-  const postsQuery = usePostsQuery(page - 1);
+  const postsQuery = useSuspensePostsQuery(page - 1);
   const searchQuery = useQuery({
     queryKey: ['posts', 'search', searchKeyword, page],
     queryFn: () => postApi.searchPosts(searchKeyword, page - 1),

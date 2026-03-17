@@ -2,16 +2,15 @@
 
 import { Suspense, useEffect } from 'react';
 import { isAxiosError } from 'axios';
-import { ErrorBoundary } from 'react-error-boundary';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchInquiryById } from '@/features/inquiry/model/api';
 import { InquiryDetailSection } from './InquiryDetailSection';
-import { useModalStore } from '@/app/store/useModalStore';
+import { InquiryDetailSkeleton } from './InquiryDetailSkeleton';
+import { ErrorBoundaryWrapper } from '@/shared/ui/ErrorBoundaryWrapper';
 import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
 
 // 1. 외부에서 사용하는 위젯 본체
 export const InquiryDetailWidget = ({ id }: { id: string }) => {
-  const { openModal, closeModal } = useModalStore();
   const { checkAuth, user } = useLoginRequired();
 
   useEffect(() => {
@@ -21,32 +20,23 @@ export const InquiryDetailWidget = ({ id }: { id: string }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  const handleError = (error: unknown): boolean | void => {
+    if (isAxiosError(error) && error.response?.status === 401) {
+      checkAuth();
+      return true; // 401은 직접 처리 → 기본 모달 건너뜀
+    }
+  };
+
   return (
-    <ErrorBoundary
-      onError={(error) => {
-        if (isAxiosError(error) && error.response?.status === 401) {
-          checkAuth();
-          return;
-        }
-        const message = isAxiosError(error) ? error.response?.data?.message : undefined;
-        openModal({
-          title: '불러오기 실패',
-          description: message ?? '문의 내용을 불러오지 못했습니다.',
-          buttons: [{ label: '확인', onClick: closeModal }],
-        });
-      }}
-      fallback={<div />}
+    <ErrorBoundaryWrapper
+      errorMessage="문의 내용을 불러오지 못했습니다."
+      redirectTo="/inquiries"
+      onError={handleError}
     >
-      <Suspense
-        fallback={
-          <div className="py-20 text-center text-gray-400">
-            내용을 불러오는 중...
-          </div>
-        }
-      >
+      <Suspense fallback={<InquiryDetailSkeleton />}>
         <InquiryDetailContent id={id} />
       </Suspense>
-    </ErrorBoundary>
+    </ErrorBoundaryWrapper>
   );
 };
 

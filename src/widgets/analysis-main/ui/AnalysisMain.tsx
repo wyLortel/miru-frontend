@@ -1,8 +1,6 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import { isAxiosError } from 'axios';
-import { ErrorBoundary } from 'react-error-boundary';
 import { useAnalysisQuery } from '@/entities/analysis/model/useAnalysisQuery';
 import { AnalysisCard } from '@/entities/analysis/ui/AnalysisCard';
 import { AnalysisListSkeleton } from '@/entities/analysis/ui/AnalysisCardSkeleton';
@@ -12,7 +10,7 @@ import {
 } from '@/features/analysis-filter/ui/AnalysisFilterTabs';
 import { CommonPagination } from '@/shared/ui/CommonPagination';
 import { usePagination } from '@/shared/lib/hooks/usePagination';
-import { useModalStore } from '@/app/store/useModalStore';
+import { ErrorBoundaryWrapper } from '@/shared/ui/ErrorBoundaryWrapper';
 import type { AnalysisItem } from '@/entities/analysis/model/types';
 
 function filterItems(items: AnalysisItem[], tab: FilterTab): AnalysisItem[] {
@@ -84,27 +82,13 @@ function AnalysisContent() {
 }
 
 export function AnalysisMain() {
-  const { openModal, closeModal } = useModalStore();
-
   return (
     <div className="mt-10">
-      <ErrorBoundary
-        onError={(error) => {
-          const message = isAxiosError(error)
-            ? error.response?.data?.message
-            : undefined;
-          openModal({
-            title: '불러오기 실패',
-            description: message ?? '자기분석 질문을 불러오지 못했습니다.',
-            buttons: [{ label: '확인', onClick: closeModal }],
-          });
-        }}
-        fallback={<div />}
-      >
+      <ErrorBoundaryWrapper errorMessage="자기분석 질문을 불러오지 못했습니다.">
         <Suspense fallback={<AnalysisListSkeleton />}>
           <AnalysisContent />
         </Suspense>
-      </ErrorBoundary>
+      </ErrorBoundaryWrapper>
     </div>
   );
 }
