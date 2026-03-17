@@ -5,6 +5,7 @@ import { isAxiosError } from 'axios';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchPostById } from '@/entities/post/model/api';
+import { postQueryKeys } from '@/entities/post/model/usePostsQuery';
 import { useModalStore } from '@/app/store/useModalStore';
 import { PostDetailSection } from './PostDetailSection';
 
@@ -32,8 +33,10 @@ export function PostDetailWidget({ postId }: { postId: string }) {
 
 function PostDetailContent({ postId }: { postId: string }) {
   const { data: post } = useSuspenseQuery({
-    queryKey: ['post', postId],
+    queryKey: postQueryKeys.detail(parseInt(postId)),
     queryFn: () => fetchPostById(postId),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   return <PostDetailSection post={post} postId={postId} />;
