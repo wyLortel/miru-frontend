@@ -2,9 +2,8 @@
 
 import { Suspense } from 'react';
 import { isAxiosError } from 'axios';
-import { ErrorBoundary } from 'react-error-boundary';
 import { Container } from '@/shared/ui/container';
-import { useModalStore } from '@/app/store/useModalStore';
+import { ErrorBoundaryWrapper } from '@/shared/ui/ErrorBoundaryWrapper';
 import { MyPageProfile } from './MyPageProfile';
 import { MyPageAnalysisStats } from './MyPageAnalysisStats';
 import { MyPagePostStats } from './MyPagePostStats';
@@ -42,24 +41,18 @@ function PostStatsSkeleton() {
 }
 
 export function MyPageMain() {
-  const { openModal, closeModal } = useModalStore();
-
-  const handleError = (error: unknown) => {
-    if (isAxiosError(error) && error.response?.status === 401) return;
-    const message = isAxiosError(error) ? error.response?.data?.message : undefined;
-    openModal({
-      title: '불러오기 실패',
-      description: message ?? '정보를 불러오지 못했습니다.',
-      buttons: [{ label: '확인', onClick: closeModal }],
-    });
-  };
-
   return (
     <Container>
       <div className="flex flex-col items-center gap-8 py-10 max-w-[480px] mx-auto">
         <MyPageProfile />
 
-        <ErrorBoundary onError={handleError} fallback={<div />}>
+        <ErrorBoundaryWrapper
+          errorMessage="정보를 불러오지 못했습니다."
+          redirectTo="/"
+          onError={(error) => {
+            if (isAxiosError(error) && error.response?.status === 401) return true;
+          }}
+        >
           <Suspense
             fallback={
               <div className="w-full flex flex-col gap-8">
@@ -73,7 +66,7 @@ export function MyPageMain() {
               <MyPagePostStats />
             </div>
           </Suspense>
-        </ErrorBoundary>
+        </ErrorBoundaryWrapper>
       </div>
     </Container>
   );

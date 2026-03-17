@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { isAxiosError } from 'axios';
-import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundaryWrapper } from '@/shared/ui/ErrorBoundaryWrapper';
 import { useAnalysisQuery } from '@/entities/analysis/model/useAnalysisQuery';
 import { TiptapEditor } from '@/shared/ui/tiptap-editor';
 import { Button } from '@/shared/ui/button';
@@ -211,26 +211,17 @@ function AnalysisDetailContent({ id }: Props) {
 }
 
 export function AnalysisDetailMain({ id }: Props) {
-  const { openModal, closeModal } = useModalStore();
-
   return (
-    <ErrorBoundary
+    <ErrorBoundaryWrapper
+      errorMessage="자기분석 정보를 불러오지 못했습니다."
+      redirectTo="/analysis"
       onError={(error) => {
-        if (isAxiosError(error) && error.response?.status === 401) return;
-        const message = isAxiosError(error)
-          ? error.response?.data?.message
-          : undefined;
-        openModal({
-          title: '불러오기 실패',
-          description: message ?? '자기분석 정보를 불러오지 못했습니다.',
-          buttons: [{ label: '확인', onClick: closeModal }],
-        });
+        if (isAxiosError(error) && error.response?.status === 401) return true;
       }}
-      fallback={<div />}
     >
       <Suspense fallback={<AnalysisListSkeleton />}>
         <AnalysisDetailContent id={id} />
       </Suspense>
-    </ErrorBoundary>
+    </ErrorBoundaryWrapper>
   );
 }
