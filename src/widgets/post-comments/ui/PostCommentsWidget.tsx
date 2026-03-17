@@ -5,6 +5,7 @@ import { isAxiosError } from 'axios';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchPostById } from '@/entities/post/model/api';
+import { postQueryKeys } from '@/entities/post/model/usePostsQuery';
 import { useModalStore } from '@/app/store/useModalStore';
 import { PostCommentsSection } from './PostCommentsSection';
 
@@ -32,10 +33,11 @@ export function PostCommentsWidget({ postId }: { postId: string }) {
 
 function PostCommentsContent({ postId }: { postId: string }) {
   const { data: post } = useSuspenseQuery({
-    queryKey: ['post', postId],
+    queryKey: postQueryKeys.detail(parseInt(postId)),
     queryFn: () => fetchPostById(postId),
-    refetchInterval: 30000,
-    refetchOnMount: 'always',
+    refetchInterval: 30000,  // 30초 폴링 유지
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   return <PostCommentsSection post={post} postId={postId} />;
