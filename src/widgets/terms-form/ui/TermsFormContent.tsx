@@ -66,6 +66,7 @@ export function TermsFormContent() {
   const { mutate: agreeTerms, isPending } = useMutation({
     mutationFn: authApi.agreeTerms,
     onSuccess: () => {
+      localStorage.removeItem('redirectAfterLogin');
       qc.setQueryData(['auth', 'me'], (old: any) => old ? { ...old, status: 'ACTIVE' } : old);
       router.push('/analysis');
     },
