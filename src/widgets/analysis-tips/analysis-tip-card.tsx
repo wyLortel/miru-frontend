@@ -57,7 +57,7 @@ export function AnalysisTipCard({
             {badgeLabel}
           </Badge>
           <Card className={pointCardStyles}>
-            <CardContent className="pt-4 pb-4 h-[180px] flex items-center justify-start">
+            <CardContent className="pt-8 pb-8 h-[180px] flex items-center justify-start">
               <p className="text-sm text-foreground/80 leading-relaxed text-left">
                 {Array.isArray(pointContent) ? (
                   pointContent.map((part, idx) => (

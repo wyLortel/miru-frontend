@@ -1,8 +1,10 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import utc from 'dayjs/plugin/utc';
 import 'dayjs/locale/ko';
 
 dayjs.extend(relativeTime);
+dayjs.extend(utc);
 dayjs.locale('ko');
 
 /**
@@ -16,7 +18,7 @@ dayjs.locale('ko');
  * - 작년 이전    → "2024년 11월 5일"
  */
 export function formatDate(isoString: string): string {
-  const date = dayjs(isoString);
+  const date = dayjs.utc(isoString).local();
   const now = dayjs();
   const diffMin = now.diff(date, 'minute');
   const diffHour = now.diff(date, 'hour');
@@ -34,10 +36,10 @@ export function formatDate(isoString: string): string {
 
 /** 툴팁용 정확한 날짜 (예: 2026. 02. 25. 18:30) */
 export function formatDateFull(isoString: string): string {
-  return dayjs(isoString).format('YYYY. MM. DD. HH:mm');
+  return dayjs.utc(isoString).local().format('YYYY. MM. DD. HH:mm');
 }
 
 /** 날짜+시간 (예: 2026년 2월 15일 14:30) */
 export function formatDateTime(isoString: string): string {
-  return dayjs(isoString).format('YYYY년 M월 D일 HH:mm');
+  return dayjs.utc(isoString).local().format('YYYY년 M월 D일 HH:mm');
 }
