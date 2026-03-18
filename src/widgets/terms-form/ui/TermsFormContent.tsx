@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { CheckIcon } from 'lucide-react';
 import { Checkbox as CheckboxPrimitive } from 'radix-ui';
@@ -59,12 +59,14 @@ export function TermsFormContent() {
   const [checkedItems, setCheckedItems] = useState({ privacy: false, service: false });
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
+  const qc = useQueryClient();
 
   const allChecked = checkedItems.privacy && checkedItems.service;
 
   const { mutate: agreeTerms, isPending } = useMutation({
     mutationFn: authApi.agreeTerms,
     onSuccess: () => {
+      qc.setQueryData(['auth', 'me'], (old: any) => old ? { ...old, status: 'ACTIVE' } : old);
       router.push('/analysis');
     },
     onError: (err) => {
