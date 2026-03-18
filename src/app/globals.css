@@ -1,26 +1,106 @@
-@import "tailwindcss";
+/* ============================= */
+/* 1️⃣ 모든 import는 최상단 */
+/* ============================= */
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@plugin '@tailwindcss/typography';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================= */
+/* 2️⃣ Theme Tokens */
+/* ============================= */
+
+@theme {
+  /* ============================= */
+  /* 🎯 브레이크포인트 */
+  /* ============================= */
+
+  --breakpoint-md: 56rem; /* 900px */
+
+  /* ============================= */
+  /* 🎯 브랜드 색 유지 */
+  /* ============================= */
+
+  --color-main: #537fe7;
+  --color-point-red: #ff5f5f;
+
+  /* ============================= */
+  /* 🎯 최소 gray 시스템 (텍스트용 2개만) */
+  /* ============================= */
+
+  --color-gray-dark: #374151; /* 기본 텍스트 */
+  --color-gray-light: #9ca3af; /* 보조 텍스트 */
+
+  /* ============================= */
+  /* 🎯 기본 white */
+  /* ============================= */
+
+  --color-white: #ffffff;
+
+  /* ============================= */
+  /* 🎯 폰트 */
+  /* ============================= */
+
+  --font-sans: 'Pretendard', 'Inter', 'Noto Sans KR', sans-serif;
+
+  /* ============================= */
+  /* 🎯 shadcn 연결 (필수) */
+  /* ============================= */
+
+  --color-background: var(--color-white);
+  --color-foreground: var(--color-gray-dark);
+
+  --color-primary: var(--color-main);
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #f3f4f6;
+  --color-secondary-foreground: var(--color-gray-dark);
+
+  --color-destructive: var(--color-point-red);
+  --color-destructive-foreground: #ffffff;
+
+  --color-border: #d1d5db;
+  --color-input: #d1d5db;
+  --color-ring: var(--color-main);
+
+  /* radius */
+
+  --radius-lg: 0.625rem;
+  --radius-md: calc(0.625rem - 2px);
+  --radius-sm: calc(0.625rem - 4px);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============================= */
+/* 3️⃣ base reset */
+/* ============================= */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-gray-dark);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+
+    @apply bg-background text-foreground;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================= */
+/* 4️⃣ Tiptap placeholder */
+/* ============================= */
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: var(--color-gray-light);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
