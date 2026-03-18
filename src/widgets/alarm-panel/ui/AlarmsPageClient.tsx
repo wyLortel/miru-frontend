@@ -1,16 +1,39 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { Suspense, useEffect, useRef, useCallback } from 'react';
+import { isAxiosError } from 'axios';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAlarmsInfiniteQuery } from '@/entities/alarm/model/useAlarmsInfiniteQuery';
-import { useHasUnreadQuery } from '@/entities/alarm/model/useHasUnreadQuery';
-import { useReadAllAlarmsMutation } from '@/features/alarm-read-all/model/useReadAllAlarmsMutation';
 import { alarmApi } from '@/entities/alarm/api/alarmApi';
 import { alarmQueryKeys } from '@/entities/alarm/model/alarmQueryKeys';
+import { useModalStore } from '@/app/store/useModalStore';
 import { AlarmList } from './AlarmList';
 
 
 export const AlarmsPageClient = () => {
+  const { openModal, closeModal } = useModalStore();
+
+  return (
+    <ErrorBoundary
+      onError={(error) => {
+        const message = isAxiosError(error) ? error.response?.data?.message : undefined;
+        openModal({
+          title: '불러오기 실패',
+          description: message ?? '알람을 불러오지 못했습니다.',
+          buttons: [{ label: '확인', onClick: closeModal }],
+        });
+      }}
+      fallback={<div />}
+    >
+      <Suspense fallback={<div className="flex-1 py-20 text-center text-gray-400">불러오는 중...</div>}>
+        <AlarmsPageContent />
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
+
+function AlarmsPageContent() {
   const queryClient = useQueryClient();
   const { data, isLoading, hasNextPage, fetchNextPage } = useAlarmsInfiniteQuery();
 
@@ -72,4 +95,4 @@ export const AlarmsPageClient = () => {
       {hasNextPage && <div ref={sentinelRef} className="h-4" />}
     </div>
   );
-};
+}

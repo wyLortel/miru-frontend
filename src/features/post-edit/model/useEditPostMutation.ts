@@ -8,7 +8,6 @@ export const useEditPostMutation = (postId: string) => {
   return useMutation({
     mutationFn: (payload: CreatePostPayload) => postApi.updatePost(postId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['post', postId] });
       queryClient.invalidateQueries({ queryKey: postQueryKeys.all });
     },
   });

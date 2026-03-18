@@ -6,6 +6,6 @@ export const useMypageQuery = () => {
   return useSuspenseQuery({
     queryKey: mypageQueryKeys.profile(),
     queryFn: mypageApi.getMyPage,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0,
   });
 };

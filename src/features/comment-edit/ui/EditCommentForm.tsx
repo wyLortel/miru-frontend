@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/shared/ui/button';
+import { postQueryKeys } from '@/entities/post/model/usePostsQuery';
 import { editComment } from '@/features/comment-create/model/api';
 
 interface EditCommentFormProps {
@@ -19,7 +20,7 @@ export function EditCommentForm({ commentId, postId, initialContent, onClose }: 
   const { mutate, isPending } = useMutation({
     mutationFn: () => editComment(commentId, content),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['post', postId] });
+      queryClient.invalidateQueries({ queryKey: postQueryKeys.detail(parseInt(postId)) });
       onClose();
     },
   });

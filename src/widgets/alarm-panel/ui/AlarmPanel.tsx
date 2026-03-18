@@ -1,15 +1,40 @@
 'use client';
 
 import Link from 'next/link';
+import { Suspense, useCallback } from 'react';
+import { isAxiosError } from 'axios';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback } from 'react';
 import { useAlarmsQuery } from '@/entities/alarm/model/useAlarmsQuery';
 import { useReadAllAlarmsMutation } from '@/features/alarm-read-all/model/useReadAllAlarmsMutation';
 import { alarmApi } from '@/entities/alarm/api/alarmApi';
 import { alarmQueryKeys } from '@/entities/alarm/model/alarmQueryKeys';
+import { useModalStore } from '@/app/store/useModalStore';
 import { AlarmList } from './AlarmList';
 
 export const AlarmPanel = () => {
+  const { openModal, closeModal } = useModalStore();
+
+  return (
+    <ErrorBoundary
+      onError={(error) => {
+        const message = isAxiosError(error) ? error.response?.data?.message : undefined;
+        openModal({
+          title: '불러오기 실패',
+          description: message ?? '알람을 불러오지 못했습니다.',
+          buttons: [{ label: '확인', onClick: closeModal }],
+        });
+      }}
+      fallback={<div />}
+    >
+      <Suspense fallback={<div className="w-96 flex flex-col max-h-[480px] items-center justify-center text-gray-400">불러오는 중...</div>}>
+        <AlarmPanelContent />
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
+
+function AlarmPanelContent() {
   const queryClient = useQueryClient();
   const { data, isLoading } = useAlarmsQuery(0);
   const { mutate: readAll, isPending } = useReadAllAlarmsMutation();
@@ -73,4 +98,4 @@ export const AlarmPanel = () => {
       )}
     </div>
   );
-};
+}

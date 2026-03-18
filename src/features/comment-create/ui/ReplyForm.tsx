@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/shared/ui/button';
+import { postQueryKeys } from '@/entities/post/model/usePostsQuery';
 import { createComment } from '../model/api';
 import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
 
@@ -27,7 +28,7 @@ export function ReplyForm({ postId, parentId, mentionName }: ReplyFormProps) {
       setIsOpen(false);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['post', postId] });
+      queryClient.invalidateQueries({ queryKey: postQueryKeys.detail(parseInt(postId)) });
     },
   });
 
