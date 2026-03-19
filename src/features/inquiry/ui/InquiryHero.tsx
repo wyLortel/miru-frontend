@@ -8,6 +8,7 @@ export const InquiryHero = () => {
       imageSrc="/assets/images/inquiry-hero.png"
       imageAlt="Inquiry Hero Character"
       imageClassName="object-contain"
+      imageContainerClassName="relative size-40 shrink-0 overflow-hidden rounded-full bg-muted"
     />
   );
 };
