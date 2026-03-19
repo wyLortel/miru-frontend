@@ -1,11 +1,12 @@
 'use client';
 
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAlarmsInfiniteQuery } from '@/entities/alarm/model/useAlarmsInfiniteQuery';
 import { useReadAllAlarmsMutation } from '@/features/alarm-read-all/model/useReadAllAlarmsMutation';
 import { AlarmsPageClient } from '@/widgets/alarm-panel/ui/AlarmsPageClient';
 
 export default function AlarmsPage() {
+  const router = useRouter();
   const { data } = useAlarmsInfiniteQuery();
   const { mutate: readAll, isPending } = useReadAllAlarmsMutation();
 
@@ -17,11 +18,12 @@ export default function AlarmsPage() {
       {/* Header */}
       <div className="border-b border-gray-200 px-4 py-4 sticky top-0 bg-white z-10">
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <Link href="/" className="text-2xl hover:opacity-70">
-              ←
-            </Link>
-            <h1 className="font-bold text-lg">알람</h1>
+          <div
+            className="flex items-center gap-3 hover:opacity-70 cursor-pointer"
+            onClick={() => router.back()}
+          >
+            <span className="text-2xl">←</span>
+            <span className="font-bold text-lg">알람</span>
           </div>
           {hasItems && (
             <button

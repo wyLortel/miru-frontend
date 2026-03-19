@@ -9,5 +9,6 @@ export function useAlarmsQuery(page: number) {
     queryKey: alarmQueryKeys.list(page),
     queryFn: () => alarmApi.getAlarms(page),
     staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 }
