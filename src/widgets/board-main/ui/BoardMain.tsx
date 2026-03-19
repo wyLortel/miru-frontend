@@ -80,7 +80,8 @@ function BoardMainContent({
     queryFn: () => postApi.searchPosts(searchKeyword, page - 1),
     enabled: isSearching,
     placeholderData: (prev) => prev,
-    staleTime: 1000 * 30,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   const { data } = isSearching ? searchQuery : postsQuery;

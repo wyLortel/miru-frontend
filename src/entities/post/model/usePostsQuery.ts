@@ -17,7 +17,6 @@ export const usePostsQuery = (page: number) => {
     staleTime: 0,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
-    refetchInterval: 30_000,
   });
 };
 
@@ -28,6 +27,5 @@ export const useSuspensePostsQuery = (page: number) => {
     staleTime: 0,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
-    refetchInterval: 30_000,
   });
 };

@@ -16,5 +16,6 @@ export function useAlarmsInfiniteQuery() {
       return fetchedCount < lastPage.totalCount ? allPages.length : undefined;
     },
     staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 }
