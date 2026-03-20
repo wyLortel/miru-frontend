@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useAuth } from '@/entities/auth/useAuth';
 import { useRouter } from 'next/navigation';
 
@@ -22,7 +23,17 @@ export const MobileMenuAuth = ({ onClose }: MobileMenuAuthProps) => {
   };
 
   if (!user) {
-    return null;
+    return (
+      <div className="border-t border-gray-100 mt-4 pt-4">
+        <Link
+          href="/login"
+          onClick={onClose}
+          className="block py-5 text-xl font-bold text-gray-800 hover:text-main transition-colors"
+        >
+          로그인
+        </Link>
+      </div>
+    );
   }
 
   return (

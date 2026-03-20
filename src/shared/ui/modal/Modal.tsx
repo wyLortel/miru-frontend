@@ -20,6 +20,7 @@ interface ModalProps {
   buttons?: ModalButton[];
   children?: ReactNode;
   iconSrc?: string;
+  onBackdropClick?: () => void;
 }
 
 export const Modal = ({
@@ -30,8 +31,17 @@ export const Modal = ({
   buttons,
   children,
   iconSrc = '/assets/icons/warning.png',
+  onBackdropClick,
 }: ModalProps) => {
   if (!isOpen) return null;
+
+  const handleBackdropClick = () => {
+    if (onBackdropClick) {
+      onBackdropClick();
+    } else {
+      onClose();
+    }
+  };
 
   return (
     <div
@@ -39,7 +49,7 @@ export const Modal = ({
       aria-modal="true"
       aria-labelledby="modal-title"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-      onClick={onClose}
+      onClick={handleBackdropClick}
     >
       <div
         className="w-full max-w-[320px] rounded-3xl bg-white p-7 shadow-xl flex flex-col items-center text-center border border-gray-100"

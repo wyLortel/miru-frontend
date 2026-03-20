@@ -15,6 +15,7 @@ interface ModalConfig {
   description?: string;
   buttons?: ModalButton[];
   priority?: number;
+  backdropAction?: () => void;
 }
 
 interface ModalState {
@@ -23,6 +24,7 @@ interface ModalState {
   description?: string;
   buttons?: ModalButton[];
   priority: number;
+  backdropAction?: () => void;
   openModal: (config: ModalConfig) => void;
   closeModal: () => void;
 }
@@ -33,6 +35,7 @@ export const useModalStore = create<ModalState>((set, get) => ({
   description: undefined,
   buttons: [],
   priority: MODAL_PRIORITY.DEFAULT,
+  backdropAction: undefined,
   openModal: (config) => {
     const { isOpen, priority } = get();
     const incomingPriority = config.priority ?? MODAL_PRIORITY.DEFAULT;
@@ -43,5 +46,5 @@ export const useModalStore = create<ModalState>((set, get) => ({
     set({ ...config, priority: incomingPriority, isOpen: true });
   },
   closeModal: () =>
-    set({ isOpen: false, title: '', description: undefined, buttons: [], priority: MODAL_PRIORITY.DEFAULT }),
+    set({ isOpen: false, title: '', description: undefined, buttons: [], priority: MODAL_PRIORITY.DEFAULT, backdropAction: undefined }),
 }));

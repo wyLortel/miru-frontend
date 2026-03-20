@@ -4,7 +4,7 @@ import { Modal } from '../../shared/ui/modal/Modal';
 import { useModalStore } from '../store/useModalStore';
 
 export const GlobalModal = () => {
-  const { isOpen, title, description, buttons, closeModal } = useModalStore();
+  const { isOpen, title, description, buttons, closeModal, backdropAction } = useModalStore();
 
   return (
     <Modal
@@ -13,6 +13,7 @@ export const GlobalModal = () => {
       title={title}
       description={description}
       buttons={buttons}
+      onBackdropClick={backdropAction}
     />
   );
 };

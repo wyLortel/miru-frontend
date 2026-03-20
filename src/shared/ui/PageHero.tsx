@@ -30,16 +30,16 @@ export function PageHero({
         <div className="flex items-center justify-between">
           {/* 텍스트 영역 */}
           <div className="flex flex-col gap-3">
-            <h1 className="text-4xl font-black tracking-tight text-foreground">
+            <h1 className="text-4xl font-black tracking-tight text-foreground max-[340px]:text-2xl">
               {title}
             </h1>
-            <p className="text-base text-muted-foreground [&_strong]:font-bold [&_strong]:text-foreground">
+            <p className="text-base text-muted-foreground [&_strong]:font-bold [&_strong]:text-foreground max-[340px]:text-sm">
               {description}
             </p>
           </div>
 
           {/* 이미지 영역 */}
-          <div className={imageContainerClassName ?? 'relative size-52 shrink-0 overflow-hidden rounded-full bg-muted'}>
+          <div className={imageContainerClassName ?? 'relative size-52 shrink-0 overflow-hidden rounded-full bg-muted max-[340px]:size-36'}>
             <Image
               src={imageSrc}
               alt={imageAlt}

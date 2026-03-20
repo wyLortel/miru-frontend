@@ -31,6 +31,10 @@ export const useLoginRequired = () => {
             router.push(loginUrl);
           } },
         ],
+        backdropAction: () => {
+          closeModal();
+          router.push(loginUrl);
+        },
       });
       return;
     }

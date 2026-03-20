@@ -27,7 +27,7 @@ export const InquiryListSection = () => {
   };
 
   return (
-    <section className="w-full max-w-[800px] mx-auto">
+    <section className="w-full max-w-[800px] mx-auto px-4">
       <div className="flex justify-end w-full mb-6">
         <Button asChild className="cursor-pointer">
           <Link href="/inquiries/write">글쓰기</Link>
