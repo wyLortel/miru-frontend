@@ -9,6 +9,7 @@ import { useAlarmsQuery } from '@/entities/alarm/model/useAlarmsQuery';
 import { useReadAllAlarmsMutation } from '@/features/alarm-read-all/model/useReadAllAlarmsMutation';
 import { alarmApi } from '@/entities/alarm/api/alarmApi';
 import { alarmQueryKeys } from '@/entities/alarm/model/alarmQueryKeys';
+import { AlarmsListResponse } from '@/entities/alarm/model/types';
 import { useModalStore } from '@/app/store/useModalStore';
 import { AlarmList } from './AlarmList';
 
@@ -46,16 +47,16 @@ function AlarmPanelContent() {
     async (itemId: number) => {
       try {
         await alarmApi.readAlarm(itemId);
-        queryClient.setQueryData(alarmQueryKeys.list(0), (oldData: any) => {
+        queryClient.setQueryData<AlarmsListResponse>(alarmQueryKeys.list(0), (oldData) => {
           if (!oldData) return oldData;
           return {
             ...oldData,
-            items: oldData.items.filter((item: any) => item.id !== itemId),
+            items: oldData.items.filter((item) => item.id !== itemId),
           };
         });
         // 헤더의 빨간 점도 업데이트
-        const updatedData = queryClient.getQueryData(alarmQueryKeys.list(0)) as any;
-        const hasUnread = updatedData?.items?.some((item: any) => !item.isRead) ?? false;
+        const updatedData = queryClient.getQueryData<AlarmsListResponse>(alarmQueryKeys.list(0));
+        const hasUnread = updatedData?.items?.some((item) => !item.isRead) ?? false;
         queryClient.setQueryData(alarmQueryKeys.hasUnread(), { hasUnread });
       } catch (error) {
         console.error('Failed to read alarm:', error);

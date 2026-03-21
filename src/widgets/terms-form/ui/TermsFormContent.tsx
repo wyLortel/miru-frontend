@@ -7,7 +7,7 @@ import { isAxiosError } from 'axios';
 import { CheckIcon } from 'lucide-react';
 import { Checkbox as CheckboxPrimitive } from 'radix-ui';
 import { cn } from '@/lib/utils';
-import { authApi } from '@/shared/api/auth';
+import { authApi, type User } from '@/shared/api/auth';
 import { useModalStore } from '@/app/store/useModalStore';
 import { PRIVACY_TEXT, SERVICE_TEXT } from '@/shared/lib/termsContent';
 
@@ -67,7 +67,7 @@ export function TermsFormContent() {
     mutationFn: authApi.agreeTerms,
     onSuccess: () => {
       localStorage.removeItem('redirectAfterLogin');
-      qc.setQueryData(['auth', 'me'], (old: any) => old ? { ...old, status: 'ACTIVE' } : old);
+      qc.setQueryData<User>(['auth', 'me'], (old) => old ? { ...old, status: 'ACTIVE' } : old);
       router.push('/analysis');
     },
     onError: (err) => {
