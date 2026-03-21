@@ -3,10 +3,11 @@
 import { Suspense, useEffect, useRef, useCallback } from 'react';
 import { isAxiosError } from 'axios';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, InfiniteData } from '@tanstack/react-query';
 import { useAlarmsInfiniteQuery } from '@/entities/alarm/model/useAlarmsInfiniteQuery';
 import { alarmApi } from '@/entities/alarm/api/alarmApi';
 import { alarmQueryKeys } from '@/entities/alarm/model/alarmQueryKeys';
+import { AlarmsListResponse } from '@/entities/alarm/model/types';
 import { useModalStore } from '@/app/store/useModalStore';
 import { AlarmList } from './AlarmList';
 
@@ -63,19 +64,19 @@ function AlarmsPageContent() {
     async (itemId: number) => {
       try {
         await alarmApi.readAlarm(itemId);
-        queryClient.setQueryData(alarmQueryKeys.infinite(), (oldData: any) => {
+        queryClient.setQueryData<InfiniteData<AlarmsListResponse>>(alarmQueryKeys.infinite(), (oldData) => {
           if (!oldData) return oldData;
           return {
             ...oldData,
-            pages: oldData.pages.map((page: any) => ({
+            pages: oldData.pages.map((page) => ({
               ...page,
-              items: page.items.filter((item: any) => item.id !== itemId),
+              items: page.items.filter((item) => item.id !== itemId),
             })),
           };
         });
         // 헤더의 빨간 점도 업데이트 (읽지 않은 알람이 남아있으면 true, 없으면 false)
-        const remainingAlarms = queryClient.getQueryData(alarmQueryKeys.infinite()) as any;
-        const hasUnread = remainingAlarms?.pages?.some((p: any) => p.items.some((item: any) => !item.isRead)) ?? false;
+        const remainingAlarms = queryClient.getQueryData<InfiniteData<AlarmsListResponse>>(alarmQueryKeys.infinite());
+        const hasUnread = remainingAlarms?.pages?.some((p) => p.items.some((item) => !item.isRead)) ?? false;
         queryClient.setQueryData(alarmQueryKeys.hasUnread(), { hasUnread });
       } catch (error) {
         console.error('Failed to read alarm:', error);
