@@ -9,7 +9,7 @@ export function BoardHero() {
           자기분석을 나누는 <strong>취준생 </strong> 커뮤니티
         </>
       }
-      imageSrc="/assets/images/board-hero.png"
+      imageSrc="/assets/images/board-hero.webp"
       imageAlt="커뮤니티 히어로 이미지"
     />
   );

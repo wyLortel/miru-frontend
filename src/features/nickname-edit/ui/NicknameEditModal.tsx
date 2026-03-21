@@ -67,7 +67,7 @@ export function NicknameEditModal({ isOpen, onClose, currentNickname }: Props) {
           새로운 닉네임을 정해주세요
         </h3>
         <Image
-          src="/assets/images/mypage-hero.png"
+          src="/assets/images/mypage-hero.webp"
           alt="캐릭터"
           width={500}
           height={500}

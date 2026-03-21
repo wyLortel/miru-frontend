@@ -5,7 +5,7 @@ export default function NotfoundPage() {
     <div className="flex flex-col min-h-screen">
       <main className="flex-1 flex flex-col items-center justify-center">
         <Image
-          src="/notfound.png"
+          src="/notfound.webp"
           alt="404 에러 우주인"
           width={400}
           height={300}

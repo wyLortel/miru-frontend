@@ -28,7 +28,7 @@ export function MyPageProfile() {
       </div>
       <p className="text-base text-muted-foreground mt-1">일본 취업 희망자</p>
       <Image
-        src="/assets/images/mypage-hero.png"
+        src="/assets/images/mypage-hero.webp"
         alt="마이페이지 캐릭터"
         width={700}
         height={700}

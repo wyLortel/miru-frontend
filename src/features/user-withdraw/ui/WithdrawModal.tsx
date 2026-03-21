@@ -55,7 +55,7 @@ export function WithdrawModal({ isOpen, onClose }: Props) {
           </p>
         </div>
         <Image
-          src="/assets/images/withdrawal-hero.png"
+          src="/assets/images/withdrawal-hero.webp"
           alt="회원탈퇴 캐릭터"
           width={400}
           height={400}

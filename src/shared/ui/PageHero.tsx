@@ -45,6 +45,7 @@ export function PageHero({
               alt={imageAlt}
               fill
               className={imageClassName ?? 'object-cover'}
+              sizes="(max-width: 340px) 144px, 208px"
               priority
             />
           </div>

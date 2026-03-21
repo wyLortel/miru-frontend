@@ -129,7 +129,7 @@ function AnalysisDetailContent({ id }: Props) {
                 </Link>
               </div>
               <Image
-                src="/assets/images/tip-character.png"
+                src="/assets/images/tip-character.webp"
                 alt="팁 캐릭터"
                 width={187}
                 height={111}

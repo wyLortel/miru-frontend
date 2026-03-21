@@ -1,0 +1,13 @@
+# miru - 일본 취업 자기분석 서비스
+# Language: ko (Korean)
+
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /alarms
+Disallow: /mypage
+Disallow: /api
+Disallow: /terms
+
+Sitemap: https://miru.io.kr/sitemap.xml

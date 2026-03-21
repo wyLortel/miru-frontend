@@ -4,7 +4,7 @@ export const LoginHero = () => {
   return (
     <div className="flex flex-col items-center mb-60 mt-20">
       <Image
-        src="/assets/images/miru-login-logo.png"
+        src="/assets/images/miru-login-logo.webp"
         alt="MIRU 로그인 로고"
         width={300} // 이미지 비율에 맞춰 적절히 조절하세요!
         height={120}
