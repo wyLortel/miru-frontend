@@ -23,7 +23,7 @@ export function PostDetailHeader({
   return (
     <div className="border-b pb-6 mb-6">
       <h1 className="text-2xl font-bold mb-4">{title}</h1>
-      <div className="flex flex-col md:flex-row md:items-center gap-3 text-sm text-gray-500">
+      <div className="flex flex-col min-[480px]:flex-row min-[480px]:items-center gap-3 text-sm text-gray-500">
         <div className="flex flex-wrap items-center gap-3">
           <span className="whitespace-nowrap">{writer}</span>
           <RelativeTime isoString={createdAt} />
@@ -40,7 +40,7 @@ export function PostDetailHeader({
             {likeCount}
           </span>
         </div>
-        {actions && <div className="flex gap-3 md:ml-auto shrink-0">{actions}</div>}
+        {actions && <div className="flex gap-3 min-[480px]:ml-auto shrink-0">{actions}</div>}
       </div>
     </div>
   );
