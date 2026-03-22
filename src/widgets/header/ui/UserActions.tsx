@@ -29,12 +29,12 @@ export const UserActions = () => {
       {user ? (
         <button
           onClick={handleLogout}
-          className="font-bold leading-none hover:text-blue-600 cursor-pointer max-[340px]:hidden"
+          className="font-bold leading-none hover:text-blue-600 cursor-pointer max-[380px]:hidden"
         >
           로그아웃
         </button>
       ) : (
-        <Link href="/login" className="font-bold leading-none hover:text-blue-600 max-[340px]:hidden">
+        <Link href="/login" className="font-bold leading-none hover:text-blue-600 max-[380px]:hidden">
           로그인
         </Link>
       )}
