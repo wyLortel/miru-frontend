@@ -24,7 +24,7 @@ export function PostCommentsWidget({ postId }: { postId: string }) {
       }}
       fallback={<div />}
     >
-      <Suspense fallback={<div className="max-w-4xl mx-auto py-10 px-4 space-y-4 h-64"><div className="h-full bg-muted animate-pulse rounded" /></div>}>
+      <Suspense fallback={<div className="max-w-4xl mx-auto py-10 px-4 space-y-4 h-64"><div className="h-full bg-gray-200 animate-pulse rounded" /></div>}>
         <PostCommentsContent postId={postId} />
       </Suspense>
     </ErrorBoundary>
