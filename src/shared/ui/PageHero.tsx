@@ -39,7 +39,7 @@ export function PageHero({
           </div>
 
           {/* 이미지 영역 */}
-          <div className={imageContainerClassName ?? 'relative size-52 shrink-0 overflow-hidden rounded-full bg-muted max-[340px]:size-36'}>
+          <div className={imageContainerClassName ?? 'relative size-52 shrink-0 overflow-hidden rounded-full bg-muted max-[340px]:size-36 max-[318px]:size-24'}>
             <Image
               src={imageSrc}
               alt={imageAlt}

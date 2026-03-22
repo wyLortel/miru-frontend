@@ -23,22 +23,24 @@ export function PostDetailHeader({
   return (
     <div className="border-b pb-6 mb-6">
       <h1 className="text-2xl font-bold mb-4">{title}</h1>
-      <div className="flex items-center gap-4 text-sm text-gray-500">
-        <span>{writer}</span>
-        <RelativeTime isoString={createdAt} />
-        <span className="flex items-center gap-1">
-          <Eye className="size-4" />
-          조회수 {viewCount}
-        </span>
-        <span className="flex items-center gap-1">
-          <MessageCircle className="size-4" />
-          {commentCount}
-        </span>
-        <span className="flex items-center gap-1">
-          <Heart className="size-4" />
-          {likeCount}
-        </span>
-        {actions && <div className="ml-auto flex gap-1">{actions}</div>}
+      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-gray-500">
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="whitespace-nowrap">{writer}</span>
+          <RelativeTime isoString={createdAt} />
+          <span className="flex items-center gap-1 whitespace-nowrap">
+            <Eye className="size-4" />
+            조회수 {viewCount}
+          </span>
+          <span className="flex items-center gap-1 whitespace-nowrap">
+            <MessageCircle className="size-4" />
+            {commentCount}
+          </span>
+          <span className="flex items-center gap-1 whitespace-nowrap">
+            <Heart className="size-4" />
+            {likeCount}
+          </span>
+        </div>
+        {actions && <div className="flex gap-3 shrink-0">{actions}</div>}
       </div>
     </div>
   );
