@@ -8,8 +8,7 @@ import { alarmApi } from '@/entities/alarm/api/alarmApi';
 import { alarmQueryKeys } from '@/entities/alarm/model/alarmQueryKeys';
 
 const InquiryDetailWidget = dynamic(
-  () => import('@/widgets/inquiry/ui/InquiryDetailWidget').then(m => ({ default: m.InquiryDetailWidget })),
-  { ssr: false }
+  () => import('@/widgets/inquiry/ui/InquiryDetailWidget').then(m => ({ default: m.InquiryDetailWidget }))
 );
 
 export function InquiryDetailPageClient({ id }: { id: string }) {
