@@ -15,7 +15,7 @@ export default function TermsPage() {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading || user === null) return null;
+  if (isLoading || user === null) return <main className="min-h-screen" />;
 
   return (
     <main className="min-h-screen">

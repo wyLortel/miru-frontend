@@ -168,7 +168,7 @@ function AnalysisDetailContent({ id }: Props) {
               />
             </div>
 
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <div className="mt-6 flex flex-wrap justify-center gap-3 min-h-[56px]">
               <Button
                 variant="destructive"
                 size="lg"

@@ -46,7 +46,7 @@ export function PostDetailSection({ post, postId }: PostDetailSectionProps) {
         }
       />
       <div
-        className="prose prose-base prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-h2:font-bold prose-strong:font-bold max-w-none min-h-[200px] text-base leading-loose mb-10"
+        className="prose prose-base prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-h2:font-bold prose-strong:font-bold max-w-none min-h-[200px] text-base leading-loose mb-10 [&_img]:max-w-full [&_img]:h-auto"
         dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
       />
       <div className="flex justify-start">

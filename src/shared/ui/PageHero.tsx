@@ -14,6 +14,8 @@ interface PageHeroProps {
   imageContainerClassName?: string;
   /** Next.js Image 클래스 오버라이드. 기본값: object-cover */
   imageClassName?: string;
+  /** 이미지를 LCP로 preload할지 여부. 기본값: false (장식 이미지는 lazy loading) */
+  priority?: boolean;
 }
 
 export function PageHero({
@@ -23,6 +25,7 @@ export function PageHero({
   imageAlt = '',
   imageContainerClassName,
   imageClassName,
+  priority = false,
 }: PageHeroProps) {
   return (
     <section className="py-12">
@@ -46,7 +49,7 @@ export function PageHero({
               fill
               className={imageClassName ?? 'object-cover'}
               sizes="(max-width: 340px) 144px, 208px"
-              priority
+              priority={priority}
             />
           </div>
         </div>
