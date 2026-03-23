@@ -7,7 +7,7 @@ import { isAxiosError } from 'axios';
 import { CheckIcon } from 'lucide-react';
 import { Checkbox as CheckboxPrimitive } from 'radix-ui';
 import { cn } from '@/lib/utils';
-import { authApi, type User } from '@/shared/api/auth';
+import { authApi } from '@/shared/api/auth';
 import { useModalStore } from '@/app/store/useModalStore';
 import { PRIVACY_TEXT, SERVICE_TEXT } from '@/shared/lib/termsContent';
 
@@ -65,9 +65,9 @@ export function TermsFormContent() {
 
   const { mutate: agreeTerms, isPending } = useMutation({
     mutationFn: authApi.agreeTerms,
-    onSuccess: () => {
+    onSuccess: async () => {
       localStorage.removeItem('redirectAfterLogin');
-      qc.setQueryData<User>(['auth', 'me'], (old) => old ? { ...old, status: 'ACTIVE' } : old);
+      await qc.invalidateQueries({ queryKey: ['auth', 'me'] });
       router.push('/analysis');
     },
     onError: (err) => {
