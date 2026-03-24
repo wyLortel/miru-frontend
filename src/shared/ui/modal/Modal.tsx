@@ -18,19 +18,8 @@ interface ModalProps {
   description?: string;
   buttons?: ModalButton[];
   children?: ReactNode;
-  icon?: ReactNode;
+  iconSrc?: string;
   onBackdropClick?: () => void;
-}
-
-function WarningIcon() {
-  return (
-    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="40" cy="40" r="40" fill="#FFF3E0" />
-      <path d="M40 22L62 58H18L40 22Z" fill="#FFB74D" stroke="#FF9800" strokeWidth="2" strokeLinejoin="round" />
-      <rect x="37" y="35" width="6" height="14" rx="3" fill="white" />
-      <circle cx="40" cy="54" r="3" fill="white" />
-    </svg>
-  );
 }
 
 export const Modal = ({
@@ -40,7 +29,7 @@ export const Modal = ({
   description,
   buttons,
   children,
-  icon = <WarningIcon />,
+  iconSrc = '/assets/icons/warning.webp',
   onBackdropClick,
 }: ModalProps) => {
   if (!isOpen) return null;
@@ -65,9 +54,15 @@ export const Modal = ({
         className="w-full max-w-[320px] rounded-3xl bg-white p-7 shadow-xl flex flex-col items-center text-center border border-gray-100"
         onClick={(e) => e.stopPropagation()}
       >
-        {icon && (
+        {iconSrc && (
           <div className="mb-4">
-            {icon}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={iconSrc}
+              alt=""
+              width={120}
+              height={120}
+            />
           </div>
         )}
         <h3 id="modal-title" className="mb-2 text-[20px] font-bold text-[#111827] leading-tight">

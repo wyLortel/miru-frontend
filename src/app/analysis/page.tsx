@@ -31,7 +31,7 @@ export default function AnalysisPage() {
         description="일본 취업의 시작, 꼭 필요한 자기분석 질문"
         imageSrc="/assets/images/analysis-hero.webp"
         imageAlt="자기분석 히어로 이미지"
-        imageContainerClassName="relative size-52 shrink-0 max-[340px]:size-36 bg-orange-50"
+        imageContainerClassName="relative size-52 shrink-0 max-[340px]:size-36"
         imageClassName="object-contain"
         priority
       />
