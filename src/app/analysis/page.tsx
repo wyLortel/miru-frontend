@@ -33,6 +33,7 @@ export default function AnalysisPage() {
         imageAlt="자기분석 히어로 이미지"
         imageContainerClassName="relative size-52 shrink-0 max-[340px]:size-36"
         imageClassName="object-contain"
+        priority
       />
       <AnalysisMain />
     </>

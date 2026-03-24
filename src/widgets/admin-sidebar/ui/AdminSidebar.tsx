@@ -22,7 +22,6 @@ export function AdminSidebar() {
             alt="MIRU 로고"
             width={200}
             height={68}
-            priority
           />
         </Link>
       </div>

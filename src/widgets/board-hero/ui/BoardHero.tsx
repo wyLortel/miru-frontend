@@ -11,6 +11,7 @@ export function BoardHero() {
       }
       imageSrc="/assets/images/board-hero.webp"
       imageAlt="커뮤니티 히어로 이미지"
+      priority
     />
   );
 }

@@ -9,7 +9,6 @@ export const Logo = () => {
         alt="MIRU 로고"
         width={120}
         height={40}
-        priority
       />
     </Link>
   );

@@ -9,6 +9,7 @@ export function AboutAnalysisHero() {
       imageAlt="자기분석 히어로 이미지"
       imageContainerClassName="relative size-52 shrink-0 max-[340px]:size-36 max-[318px]:size-28"
       imageClassName="object-contain"
+      priority
     />
   );
 }

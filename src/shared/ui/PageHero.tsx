@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import Image from 'next/image';
+import { HeroImage } from '@/shared/ui/HeroImage';
 import { Container } from '@/shared/ui/container';
 
 interface PageHeroProps {
@@ -43,10 +43,9 @@ export function PageHero({
 
           {/* 이미지 영역 */}
           <div className={imageContainerClassName ?? 'relative size-52 shrink-0 overflow-hidden rounded-full bg-muted max-[340px]:size-36 max-[318px]:size-24'}>
-            <Image
+            <HeroImage
               src={imageSrc}
               alt={imageAlt}
-              fill
               className={imageClassName ?? 'object-cover'}
               sizes="(max-width: 340px) 144px, 208px"
               priority={priority}
