@@ -198,12 +198,25 @@ function AnalysisDetailContent({ id }: Props) {
             </div>
           </>
         ) : (
-          <div className="w-full border border-[var(--color-border)] rounded-lg overflow-hidden bg-white">
-            <div
-              className="prose prose-base prose-h1:text-2xl prose-h2:text-xl max-w-none text-[var(--color-foreground)] p-10 min-h-[50vh] overflow-y-auto"
-              dangerouslySetInnerHTML={{ __html: sanitizeHtml(viewContent) }}
-            />
-          </div>
+          <>
+            <div className="w-full border border-[var(--color-border)] rounded-lg overflow-hidden bg-white">
+              <div
+                className="prose prose-base prose-h1:text-2xl prose-h2:text-xl max-w-none text-[var(--color-foreground)] p-10 min-h-[50vh] overflow-y-auto"
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(viewContent) }}
+              />
+            </div>
+
+            <div className="mt-6 flex justify-center">
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => router.push('/analysis')}
+                className="rounded-2xl px-6 sm:px-10 bg-white text-black border-gray-300 hover:bg-gray-50 hover:text-black"
+              >
+                목록으로
+              </Button>
+            </div>
+          </>
         )}
       </div>
     </Container>
