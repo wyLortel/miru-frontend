@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { memo } from 'react';
 
 interface BaseProps {
@@ -21,7 +20,7 @@ const BaseButton = memo(function BaseButton({
       onClick={onClick}
       className={`flex items-center justify-center w-full h-[60px] rounded-[12px] gap-3 font-medium cursor-pointer transition-all active:scale-95 ${className}`}
     >
-      <Image
+      <img
         src={icon}
         alt="logo"
         width={24}

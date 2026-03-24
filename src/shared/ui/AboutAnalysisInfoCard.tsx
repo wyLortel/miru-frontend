@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 interface AboutAnalysisInfoCardProps {
   title: string;
   description: string;
@@ -16,14 +14,13 @@ export function AboutAnalysisInfoCard({
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm md:p-8">
       {iconSrc && (
-        <div className="mb-4 w-12 h-12 relative">
-          <Image
-            src={iconSrc}
-            alt={iconAlt || ''}
-            fill
-            className="object-contain"
-          />
-        </div>
+        <img
+          src={iconSrc}
+          alt={iconAlt || ''}
+          width={48}
+          height={48}
+          className="mb-4 object-contain"
+        />
       )}
       <h3 className="mb-2 text-lg font-semibold text-foreground md:text-xl">
         {title}

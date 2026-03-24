@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
@@ -54,7 +53,7 @@ export function WithdrawModal({ isOpen, onClose }: Props) {
             언제나 다시 기다리고 있겠습니다
           </p>
         </div>
-        <Image
+        <img
           src="/assets/images/withdrawal-hero.webp"
           alt="회원탈퇴 캐릭터"
           width={400}

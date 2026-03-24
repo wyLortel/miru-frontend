@@ -2,7 +2,6 @@
 
 import { Suspense, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import { ErrorBoundaryWrapper } from '@/shared/ui/ErrorBoundaryWrapper';
@@ -128,7 +127,7 @@ function AnalysisDetailContent({ id }: Props) {
                   자기분석 팁 바로 읽기!
                 </Link>
               </div>
-              <Image
+              <img
                 src="/assets/images/tip-character.webp"
                 alt="팁 캐릭터"
                 width={187}

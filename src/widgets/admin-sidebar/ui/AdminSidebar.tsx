@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { MessageSquareMore, BookUser } from 'lucide-react';
 
@@ -17,7 +16,7 @@ export function AdminSidebar() {
     <aside className="w-48 shrink-0 flex flex-col border-r border-border h-full">
       <div className="px-6 py-6">
         <Link href="/analysis">
-          <Image
+          <img
             src="/miru_logo.webp"
             alt="MIRU 로고"
             width={200}

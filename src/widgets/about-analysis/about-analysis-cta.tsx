@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { Container } from '@/shared/ui/container';
 import { Button } from '@/shared/ui/button';
@@ -11,14 +10,13 @@ export function AboutAnalysisCta() {
       <Container>
         <div className="flex flex-col items-center justify-center gap-6 text-center">
           {/* 별 아이콘 */}
-          <div className="relative w-12 h-12 md:w-16 md:h-16">
-            <Image
-              src="/assets/icons/about-star.webp"
-              alt="별 아이콘"
-              fill
-              className="object-contain"
-            />
-          </div>
+          <img
+            src="/assets/icons/about-star.webp"
+            alt="별 아이콘"
+            width={48}
+            height={48}
+            className="object-contain w-12 h-12 md:w-16 md:h-16"
+          />
 
           {/* 제목 */}
           <div className="space-y-2">
