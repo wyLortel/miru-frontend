@@ -1,0 +1,21 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="60" y1="10" x2="60" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDCF3B"/>
+      <stop offset="100%" stop-color="#E8A010"/>
+    </linearGradient>
+    <filter id="s">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#C47D00" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <!-- 라운드 삼각형 -->
+  <path d="M50 28 A12 12 0 0 1 70 28 L98 80 A12 12 0 0 1 87 98 L33 98 A12 12 0 0 1 22 80 Z"
+        fill="url(#g)" filter="url(#s)"/>
+  <!-- 상단 하이라이트 (입체감) -->
+  <path d="M50 28 A12 12 0 0 1 70 28 L84 60 H36 Z"
+        fill="white" fill-opacity="0.12"/>
+  <!-- 느낌표 막대 -->
+  <rect x="54" y="41" width="12" height="30" rx="6" fill="white"/>
+  <!-- 느낌표 점 -->
+  <circle cx="60" cy="83" r="6" fill="white"/>
+</svg>
