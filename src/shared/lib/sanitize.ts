@@ -11,7 +11,7 @@ export function sanitizeHtml(html: string): string {
       'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'a', 'img',
       'span', 'div', 'table', 'tr', 'td', 'th', 'thead', 'tbody'
     ],
-    ALLOWED_ATTR: ['href', 'title', 'alt', 'src', 'class'],
+    ALLOWED_ATTR: ['href', 'title', 'alt', 'src', 'class', 'style'],
     ALLOW_DATA_ATTR: false,
   });
 }
