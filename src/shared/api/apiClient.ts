@@ -27,7 +27,7 @@ apiClient.interceptors.request.use((config) => {
 
 apiClient.interceptors.response.use(
   (res) => res,
-  (err) => {
+  async (err) => {
     const url = err.config?.url ?? '';
     if (err.response?.status === 401 && !url.includes('/api/me')) {
       window.dispatchEvent(new Event(APP_EVENTS.AUTH_LOGOUT));
@@ -39,6 +39,11 @@ apiClient.interceptors.response.use(
         window.dispatchEvent(new Event(APP_EVENTS.TERMS_REQUIRED));
       } else if (message.includes('정지')) {
         window.dispatchEvent(new Event(APP_EVENTS.ACCOUNT_BANNED));
+      } else if (!err.config?._csrfRetried) {
+        // CSRF 토큰 타이밍 문제일 가능성 → 200ms 후 1회 재시도
+        err.config._csrfRetried = true;
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        return apiClient(err.config);
       }
     }
 
