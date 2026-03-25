@@ -5,6 +5,7 @@ import { Heart, MessageCircle } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { Card, CardContent } from '@/shared/ui/card';
 import { RelativeTime } from '@/shared/ui/RelativeTime';
+import { useAdminWriter } from '@/shared/lib/hooks/useAdminWriter';
 import type { Post } from '@/entities/post/model/types';
 
 interface PostCardProps {
@@ -14,6 +15,8 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, isSelected = false, onClick }: PostCardProps) {
+  const isAdmin = useAdminWriter(post.writer);
+
   if (post.type === 'NOTICE') {
     return (
       <Card
@@ -62,7 +65,7 @@ export function PostCard({ post, isSelected = false, onClick }: PostCardProps) {
         </div>
         <div className="flex items-center justify-between">
           <span className="text-xs">
-            <span className="font-medium text-foreground">{post.writer}</span>
+            <span className={`font-medium ${isAdmin ? 'text-primary' : 'text-foreground'}`}>{post.writer}</span>
             <span className="text-muted-foreground">
               &nbsp; | &nbsp;
               <RelativeTime isoString={post.createdAt} />

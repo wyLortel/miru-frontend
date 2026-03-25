@@ -1,6 +1,7 @@
 import { Comment, Reply } from '@/entities/post/model/types';
 import { RelativeTime } from '@/shared/ui/RelativeTime';
 import { Card, CardContent } from '@/shared/ui/card';
+import { useAdminWriter } from '@/shared/lib/hooks/useAdminWriter';
 
 function CommentContent({ text }: { text: string }) {
   const parts = text.split(/(@\S+)/g);
@@ -26,6 +27,8 @@ interface CommentItemProps {
 }
 
 export function CommentItem({ comment, isReply = false, actions, ownerActions, editForm }: CommentItemProps) {
+  const isAdmin = useAdminWriter(comment.writer);
+
   if (isReply) {
     return (
       <div className="flex gap-3 mt-2 ml-8 pl-4 border-l-2 border-border">
@@ -34,7 +37,7 @@ export function CommentItem({ comment, isReply = false, actions, ownerActions, e
             <CardContent className="px-4 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span className="font-bold text-foreground">{comment.writer}</span>
+                  <span className={`font-bold ${isAdmin ? 'text-primary' : 'text-foreground'}`}>{comment.writer}</span>
                   <RelativeTime isoString={comment.createdAt} />
                 </div>
                 {ownerActions && <div className="flex gap-1">{ownerActions}</div>}
@@ -53,7 +56,7 @@ export function CommentItem({ comment, isReply = false, actions, ownerActions, e
       <CardContent className="px-4 flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span className="font-bold text-foreground">{comment.writer}</span>
+            <span className={`font-bold ${isAdmin ? 'text-primary' : 'text-foreground'}`}>{comment.writer}</span>
             <RelativeTime isoString={comment.createdAt} />
           </div>
           {ownerActions && <div className="flex gap-1">{ownerActions}</div>}

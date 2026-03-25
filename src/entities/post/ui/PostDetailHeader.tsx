@@ -1,4 +1,7 @@
+'use client';
+
 import { RelativeTime } from '@/shared/ui/RelativeTime';
+import { useAdminWriter } from '@/shared/lib/hooks/useAdminWriter';
 import { Eye, MessageCircle, Heart } from 'lucide-react';
 
 interface PostDetailHeaderProps {
@@ -20,12 +23,14 @@ export function PostDetailHeader({
   createdAt,
   actions,
 }: PostDetailHeaderProps) {
+  const isAdmin = useAdminWriter(writer);
+
   return (
     <div className="border-b pb-6 mb-6">
       <h1 className="text-2xl font-bold mb-4">{title}</h1>
       <div className="flex flex-col min-[480px]:flex-row min-[480px]:items-center gap-3 text-sm text-gray-500">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="whitespace-nowrap">{writer}</span>
+          <span className={`whitespace-nowrap ${isAdmin ? 'text-primary font-semibold' : ''}`}>{writer}</span>
           <RelativeTime isoString={createdAt} />
           <span className="flex items-center gap-1 whitespace-nowrap">
             <Eye className="size-4" />
