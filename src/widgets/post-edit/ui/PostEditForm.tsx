@@ -13,6 +13,7 @@ import { Container } from '@/shared/ui/container';
 import { useModalStore } from '@/app/store/useModalStore';
 import { fetchPostById } from '@/entities/post/model/api';
 import { useEditPostMutation } from '@/features/post-edit/model/useEditPostMutation';
+import { useApiErrorModal } from '@/shared/lib/hooks/useApiErrorModal';
 
 interface PostEditFormProps {
   postId: string;
@@ -49,6 +50,7 @@ export function PostEditForm({ postId }: PostEditFormProps) {
 function PostEditFormContent({ postId }: { postId: string }) {
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
+  const { handleError } = useApiErrorModal();
 
   const { data: post } = useSuspenseQuery({
     queryKey: ['post', postId],
@@ -77,14 +79,7 @@ function PostEditFormContent({ postId }: { postId: string }) {
           router.replace(`/boards/${postId}`);
         },
         onError: (error) => {
-          const message = isAxiosError(error)
-            ? error.response?.data?.message
-            : undefined;
-          openModal({
-            title: '수정 실패',
-            description: message,
-            buttons: [{ label: '닫기', onClick: closeModal }],
-          });
+          handleError(error, '수정 실패');
         },
       },
     );

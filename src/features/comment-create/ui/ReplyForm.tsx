@@ -6,6 +6,7 @@ import { Button } from '@/shared/ui/button';
 import { postQueryKeys } from '@/entities/post/model/usePostsQuery';
 import { createComment } from '../model/api';
 import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
+import { useApiErrorModal } from '@/shared/lib/hooks/useApiErrorModal';
 
 interface ReplyFormProps {
   postId: string;
@@ -18,6 +19,7 @@ export function ReplyForm({ postId, parentId, mentionName }: ReplyFormProps) {
   const [content, setContent] = useState('');
   const queryClient = useQueryClient();
   const { checkAuth } = useLoginRequired();
+  const { handleError } = useApiErrorModal();
 
   const finalContent = mentionName ? `@${mentionName} ${content}` : content;
 
@@ -26,6 +28,9 @@ export function ReplyForm({ postId, parentId, mentionName }: ReplyFormProps) {
     onSuccess: () => {
       setContent('');
       setIsOpen(false);
+    },
+    onError: (error) => {
+      handleError(error, '답글 작성 실패');
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: postQueryKeys.detail(parseInt(postId)) });

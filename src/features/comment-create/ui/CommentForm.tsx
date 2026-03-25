@@ -6,6 +6,7 @@ import { postQueryKeys } from '@/entities/post/model/usePostsQuery';
 import { Button } from '@/shared/ui/button';
 import { createComment } from '../model/api';
 import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
+import { useApiErrorModal } from '@/shared/lib/hooks/useApiErrorModal';
 
 interface CommentFormProps {
   postId: string;
@@ -15,11 +16,15 @@ export function CommentForm({ postId }: CommentFormProps) {
   const [content, setContent] = useState('');
   const queryClient = useQueryClient();
   const { checkAuth } = useLoginRequired();
+  const { handleError } = useApiErrorModal();
 
   const { mutate, isPending } = useMutation({
     mutationFn: () => createComment(postId, content, null),
     onSuccess: () => {
       setContent('');
+    },
+    onError: (error) => {
+      handleError(error, '댓글 작성 실패');
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: postQueryKeys.detail(parseInt(postId)) });

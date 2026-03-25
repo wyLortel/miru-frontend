@@ -7,9 +7,9 @@ import { TitleInput } from '@/shared/ui/title-input';
 import { TiptapEditor } from '@/shared/ui/tiptap-editor';
 import { Button } from '@/shared/ui/button';
 import { Container } from '@/shared/ui/container';
-import { isAxiosError } from 'axios';
 import { useModalStore } from '@/app/store/useModalStore';
 import { useCreatePostMutation } from '@/features/post-create/model/useCreatePostMutation';
+import { useApiErrorModal } from '@/shared/lib/hooks/useApiErrorModal';
 
 export function PostWriteForm() {
   const router = useRouter();
@@ -18,6 +18,7 @@ export function PostWriteForm() {
 
   const { openModal, closeModal } = useModalStore();
   const { mutate: createPost, isPending } = useCreatePostMutation();
+  const { handleError } = useApiErrorModal();
 
   const handleSubmit = () => {
     if (!title || !content) {
@@ -36,14 +37,7 @@ export function PostWriteForm() {
           router.replace(`/boards/${post.id}`);
         },
         onError: (error) => {
-          const message = isAxiosError(error)
-            ? error.response?.data?.message
-            : undefined; // 알수없는 에러의 대비책
-          openModal({
-            title: '등록 실패',
-            description: message,
-            buttons: [{ label: '닫기', onClick: closeModal }],
-          });
+          handleError(error, '등록 실패');
         },
       },
     );

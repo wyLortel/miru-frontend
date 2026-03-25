@@ -1,6 +1,5 @@
 'use client';
 
-import { isAxiosError } from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCreateInquiryMutation } from '@/features/inquiry/model/useCreateInquiryMutation';
@@ -9,16 +8,15 @@ import { TitleInput } from '@/shared/ui/title-input';
 import { TiptapEditor } from '@/shared/ui/tiptap-editor';
 import { Container } from '@/shared/ui/container';
 import { useModalStore } from '@/app/store/useModalStore';
+import { useApiErrorModal } from '@/shared/lib/hooks/useApiErrorModal';
 
 export function InquiryWriteForm() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const router = useRouter();
 
-  // 1. 모달 제어 함수 가져오기
   const { openModal, closeModal } = useModalStore();
-
-  // 2. mutation 훅 사용
+  const { handleError } = useApiErrorModal();
   const { mutate: createInquiryMutation, isPending } = useCreateInquiryMutation();
 
   const handleSubmit = () => {
@@ -38,14 +36,7 @@ export function InquiryWriteForm() {
           router.push('/inquiries');
         },
         onError: (error) => {
-          const message = isAxiosError(error)
-            ? error.response?.data?.message
-            : undefined;
-          openModal({
-            title: '등록 실패',
-            description: message ?? '등록에 실패했습니다.',
-            buttons: [{ label: '확인', onClick: closeModal }],
-          });
+          handleError(error, '등록 실패');
         },
       }
     );
