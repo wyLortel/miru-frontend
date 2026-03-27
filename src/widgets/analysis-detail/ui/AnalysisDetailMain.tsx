@@ -137,7 +137,6 @@ function AnalysisDetailContent({ id }: Props) {
             </div>
           ) : (
             <Button
-              variant="outline"
               size="sm"
               onClick={() => {
                 setEditorContent(viewContent);
