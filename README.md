@@ -324,7 +324,7 @@ openModal(modal) {
 
 ---
 
-## 🔑 重要実装ポイント (面接トピック 4 件)
+## 🔑 重要実装ポイント 
 
 ### 1️⃣ 楽観的更新 (いいね)
 
@@ -437,9 +437,6 @@ npm run lint
 ### Prettier
 未設定（チーム規模では ESLint ルールのみで十分）。
 
-### テスト
-**現状**: 未作成。  
-**ロードマップ**: MSW + Vitest ベースのテスト環境構築予定。
 
 ### ビルド
 ```bash
@@ -510,14 +507,6 @@ npm run dev
 - タグ定義 (カテゴリ: 志望動機・自己PR・経験・価値観 など)
 - フィルタ UI の実装
 - Query Key にフィルタ条件を含めたキャッシュ設計
-
-### 3. MSW + Vitest テスト環境構築
-
-**目標**: API モックによる独立した unit/component テスト作成。  
-**作業**:
-- `msw` インストール + handler 定義
-- `@testing-library/react` + `vitest` 設定
-- 主要 hooks (useAuth, usePostsQuery, useMutation) テスト追加
 
 ---
 
