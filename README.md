@@ -1,5 +1,26 @@
 # miru — 日本就職を目指す韓国人学生のための自己分析支援 Web アプリ UI
 
+**Live Demo**: [https://miru.io.kr](https://miru.io.kr) &nbsp;|&nbsp; **Figma**: [UI/UX デザインを見る](https://www.figma.com/design/Dq6hFbh3o4TRSrUx8u48QD/%EC%9E%90%EA%B8%B0%EB%B6%84%EC%84%9D-%EC%82%AC%EC%9D%B4%ED%8A%B8?node-id=0-1&p=f&t=yJxDSOe8TYtT9bfy-0)
+
+---
+
+## 目次
+
+- [サービス概要](#サービス概要)
+- [Demo](#demo)
+- [主な機能](#主な機能)
+- [Tech Stack](#tech-stack)
+- [アーキテクチャ](#アーキテクチャ)
+- [フォルダ構成](#フォルダ構成)
+- [API 連携仕様](#api-連携仕様)
+- [状態管理戦略](#状態管理戦略)
+- [重要実装ポイント](#重要実装ポイント)
+- [パフォーマンス / UX](#パフォーマンス--ux)
+- [品質 & ビルド](#品質--ビルド)
+- [ローカル起動](#ローカル起動)
+- [担当範囲](#担当範囲)
+- [ロードマップ](#ロードマップ)
+
 ---
 
 ## 🎯 サービス概要
@@ -214,6 +235,26 @@ NEXT_PUBLIC_API_NIP_URL=https://api.example.com
 - **CSRF Token**: クッキーの XSRF-TOKEN 値 → `X-XSRF-TOKEN` ヘッダーへ注入
 - **実装**: `src/shared/api/apiClient.ts:14-20`
 
+### Cookie 属性方針
+
+| 属性 | 想定値 | 意図 |
+|---|---|---|
+| `HttpOnly` | `true` | JavaScript からのクッキー読み取りを禁止し、XSS によるセッション奪取を防ぐ |
+| `Secure` | `true` (本番) | HTTPS 通信時のみクッキーを送信。HTTP 通信での漏洩を防ぐ |
+| `SameSite` | `Lax` | CSRF 対策の基本ライン。同一オリジンと GET の外部リンクのみ送信 |
+
+> **Note**: Cookie 属性はバックエンド (Spring Boot) 側で設定。フロントは CSRF トークンをヘッダーで二重防御。
+
+### CORS / Origin 方針
+
+```
+[Browser] → [Next.js Route Handler (same-origin)] → [Spring Boot API]
+```
+
+- フロントは Next.js の Route Handler を **BFF プロキシ** として経由する same-origin 構成
+- ブラウザから直接バックエンドへ cross-origin リクエストを送らないため、CORS エラーが発生しない
+- バックエンドは Next.js サーバーからのリクエストのみ許可すればよく、`allowedOrigins` のスコープが最小化される
+
 ### エラー処理方針
 
 | ステータス | 動作 | 実装箇所 |
@@ -409,13 +450,13 @@ observer.observe(sentinelRef.current!);
 
 ## ⚡ パフォーマンス / UX
 
-| 項目 | 実装 | 効果 |
-|---|---|---|
-| **React Compiler** | `babel-plugin-react-compiler` | 自動メモ化（再レンダリングスキップ） |
-| **Suspense + Error Boundary** | `useSuspenseQuery` + `ErrorBoundaryWrapper` | 宣言的ローディング/エラー処理 |
-| **Query Caching** | `staleTime: 60s` | 不要な API 再呼び出し防止 |
-| **HTML Sanitize** | `DOMPurify` | XSS 防止 (Tiptap HTML 出力) |
-| **Code Splitting** | Next.js 標準 (App Router) | ページ別 JS バンドル最小化 |
+| 項目 | 実装 | 効果 | 検証方法 |
+|---|---|---|---|
+| **React Compiler** | `babel-plugin-react-compiler` | 自動メモ化（再レンダリングスキップ） | React DevTools の Profiler でレンダリング回数を確認 |
+| **Suspense + Error Boundary** | `useSuspenseQuery` + `ErrorBoundaryWrapper` | 宣言的ローディング/エラー処理 | ネットワーク遅延シミュレーション（Chrome DevTools Throttling）で表示確認 |
+| **Query Caching** | `staleTime: 60s` | 不要な API 再呼び出し防止 | Network タブで 1 分以内の再遷移時にリクエストが発生しないことを確認 |
+| **HTML Sanitize** | `DOMPurify` | XSS 防止 (Tiptap HTML 出力) | `<script>alert(1)</script>` 入力 → レンダリング後に実行されないことを確認 |
+| **Code Splitting** | Next.js 標準 (App Router) | ページ別 JS バンドル最小化 | `next build` 後の `.next/analyze` で各ページの JS サイズを確認 |
 
 ---
 
