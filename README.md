@@ -1,25 +1,25 @@
 # miru — 日本就職を目指す韓国人学生のための自己分析支援 Web アプリ UI
 
-**Live Demo**: [https://miru.io.kr](https://miru.io.kr) &nbsp;|&nbsp; **Figma**: [UI/UX デザインを見る](https://www.figma.com/design/Dq6hFbh3o4TRSrUx8u48QD/%EC%9E%90%EA%B8%B0%EB%B6%84%EC%84%9D-%EC%82%AC%EC%9D%B4%ED%8A%B8?node-id=0-1&p=f&t=yJxDSOe8TYtT9bfy-0)
+**Live Demo**: <a href="https://miru.io.kr" target="_blank" rel="noopener noreferrer">https://miru.io.kr</a> &nbsp;|&nbsp; **Figma**: <a href="https://www.figma.com/design/Dq6hFbh3o4TRSrUx8u48QD/%EC%9E%90%EA%B8%B0%EB%B6%84%EC%84%9D-%EC%82%AC%EC%9D%B4%ED%8A%B8?node-id=0-1&p=f&t=yJxDSOe8TYtT9bfy-0" target="_blank" rel="noopener noreferrer">UI/UX デザインを見る</a>
 
 ---
 
 ## 目次
 
-- [サービス概要](#サービス概要)
-- [Demo](#demo)
-- [主な機能](#主な機能)
-- [Tech Stack](#tech-stack)
-- [アーキテクチャ](#アーキテクチャ)
-- [フォルダ構成](#フォルダ構成)
-- [API 連携仕様](#api-連携仕様)
-- [状態管理戦略](#状態管理戦略)
-- [重要実装ポイント](#重要実装ポイント)
-- [パフォーマンス / UX](#パフォーマンス--ux)
-- [品質 & ビルド](#品質--ビルド)
-- [ローカル起動](#ローカル起動)
-- [担当範囲](#担当範囲)
-- [ロードマップ](#ロードマップ)
+- [サービス概要](#-サービス概要)
+- [Demo](#-demo)
+- [主な機能](#-主な機能-ユーザー価値ベース)
+- [Tech Stack](#-tech-stack-選定理由付き)
+- [アーキテクチャ](#-アーキテクチャ)
+- [フォルダ構成](#-フォルダ構成-責務付き)
+- [API 連携仕様](#-api-連携仕様)
+- [状態管理戦略](#-状態管理戦略)
+- [重要実装ポイント](#-重要実装ポイント)
+- [パフォーマンス / UX](#-パフォーマンス--ux)
+- [品質 & ビルド](#-品質--ビルド)
+- [ローカル起動](#-ローカル起動)
+- [担当範囲](#-担当範囲)
+- [ロードマップ](#-ロードマップ-改善計画-3-件)
 
 ---
 
