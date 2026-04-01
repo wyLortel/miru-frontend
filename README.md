@@ -1,272 +1,267 @@
-# miru — 일본 취업 준비 한국인을 위한 자기분석 웹 앱 UI
+# miru — 日本就職を目指す韓国人学生のための自己分析支援 Web アプリ UI
+
+---
+
+## 🎯 サービス概要
+
+本サービスは、**日本就職を目指す韓国人学生**に向けて、  
+自己分析の重要性を理解し、質問ベースで思考を深めながら、  
+自分の経験・価値観・志望理由を**自分の言葉で説明できる状態**をつくるための自己分析支援サービスである。
+
+単に模範解答を見せたり、きれいな文章を自動生成したりすることが目的ではない。  
+面接で深掘りされたときにも崩れないよう、  
+自分自身の経験を、自分の頭で整理し、自分の言葉で語れる状態をつくることを目的としている。
+
+### このサービスを作った背景
+
+過去に日本就職を経験した中で、大きな失敗をした。  
+表面的な答えでは通用せず、「なぜそう考えたのか」「なぜその会社なのか」まで丁寧に深掘りされることが多かった。  
+この経験から、**自己分析が不足していると、実力があっても自分を伝えきれない**ことを痛感した。
+
+また、多くの学生が「自己分析より技術勉強のほうが重要」「そもそも自己分析が何か分からない」という状態にあることも分かり、  
+これは個人の失敗ではなく、日本就職を目指す学生が共通してぶつかりやすい**構造的な問題**だと考えた。
 
 ---
 
 ## 📸 Demo
 
-**로그인 → 자기분석 작성 → 커뮤니티 → 알림 흐름**
+**ログイン → 自己分析作成 → コミュニティ → 通知 フロー**
 
 ```
-[로그인 화면] 
+[ログイン画面]
    ↓ (Google OAuth2)
-[자기분석 대시보드] (Tiptap 리치텍스트 에디터)
+[自己分析ダッシュボード] (Tiptap リッチテキストエディタ)
    ↓
-[커뮤니티 게시판] (작성/좋아요/댓글)
+[コミュニティ掲示板] (投稿/いいね/コメント)
    ↓
-[실시간 알림 배지] (무한스크롤 알림함)
+[リアルタイム通知バッジ] (無限スクロール通知一覧)
 ```
 
-스크린샷은 배포 이후 추가 예정입니다.
+スクリーンショットはデプロイ後に追加予定です。
 
 ---
 
-## ✨ 핵심 기능 (유저 가치 중심)
+## ✨ 主な機能 (ユーザー価値ベース)
 
-| 기능 | 설명 |
+| 機能 | 説明 |
 |---|---|
-| **자기분석 작성/편집** | 리치텍스트 에디터(Tiptap)로 자신의 강점/약점 정리 |
-| **커뮤니티 게시글** | 게시글 작성, 좋아요 (낙관적 업데이트), 댓글/답글 |
-| **실시간 알림** | 배지 30초 폴링, 알림함 무한스크롤로 즉각성 확보 |
-| **1:1 문의** | 유저 → 관리자 문의 및 답변 조회 |
-| **마이페이지** | 프로필 관리, 내 게시글/댓글 보기, 회원 탈퇴 |
-| **관리자 대시보드** | 유저 관리(정지/복구), 1:1 문의 처리 |
+| **自己分析 作成/編集** | リッチテキストエディタ(Tiptap)で強み・弱みを整理 |
+| **コミュニティ掲示板** | 投稿作成、いいね (楽観的更新)、コメント/返信 |
+| **リアルタイム通知** | バッジ 30 秒ポーリング、通知一覧は無限スクロールで即時表示 |
+| **1:1 お問い合わせ** | ユーザー → 管理者への問い合わせ・回答確認 |
+| **マイページ** | プロフィール管理、自分の投稿/コメント一覧、退会 |
+| **管理者ダッシュボード** | ユーザー管理（停止/復旧）、お問い合わせ対応 |
 
 ---
 
-## 🛠️ Tech Stack (선택 이유 포함)
+## 🛠️ Tech Stack (選定理由付き)
 
-| 분야 | 라이브러리 | 버전 | 선택 이유 |
+| 分野 | ライブラリ | バージョン | 選定理由 |
 |---|---|---|---|
-| **Framework** | Next.js | 16.1.6 | SSR + Route Handler로 BFF(Backend For Frontend) 역할 수행 |
-| **Language** | TypeScript | ^5 | 타입 안정성, 팀 협업 효율성 |
-| **Styling** | Tailwind CSS + shadcn/ui | v4.1.18 + ^3.8.4 | 유틸리티 우선 CSS, 상대방 컴포넌트 커스터마이징 자유도 |
-| **Server State** | TanStack Query | ^5.90 | 캐싱/무효화 세밀 제어, staleTime/gcTime 전략으로 API 호출 최소화 |
-| **Client State** | Zustand | ^5.0 | 글로벌 UI 상태(모달/알람 패널) 최소화, 보일러플레이트 없음 |
-| **HTTP Client** | Axios | ^1.13 | 인터셉터 기반 CSRF/401 중앙화 처리 |
-| **Rich Text** | Tiptap | ^3.19 | 자기분석 서비스 특성상 구조화된 텍스트 편집 필요 |
-| **HTML 보안** | DOMPurify | ^3.3 | XSS 방지 (dangerouslySetInnerHTML 사용 시) |
-| **Date Util** | dayjs | ^1.11 | 가벼운 날짜 조작 |
-| **Error Boundary** | react-error-boundary | ^6.1 | Suspense와 조합하여 선언적 에러 처리 |
-| **Icons** | lucide-react | ^0.564 | Tailwind와 통합, tree-shakeable |
+| **Framework** | Next.js | 16.1.6 | SSR + Route Handler で BFF(Backend For Frontend) 役割を担う |
+| **Language** | TypeScript | ^5 | 型安全性、チーム開発の効率化 |
+| **Styling** | Tailwind CSS + shadcn/ui | v4.1.18 + ^3.8.4 | ユーティリティファースト CSS、コンポーネントのカスタマイズ自由度が高い |
+| **Server State** | TanStack Query | ^5.90 | キャッシュ/無効化の細粒度制御、staleTime/gcTime 戦略で API 呼び出し最小化 |
+| **Client State** | Zustand | ^5.0 | グローバル UI 状態（モーダル/通知パネル）を最小限に管理、ボイラープレート不要 |
+| **HTTP Client** | Axios | ^1.13 | インターセプタによる CSRF/401 処理の一元化 |
+| **Rich Text** | Tiptap | ^3.19 | 自己分析サービスの特性上、構造化テキスト編集が必要 |
+| **HTML セキュリティ** | DOMPurify | ^3.3 | XSS 防止（dangerouslySetInnerHTML 使用時） |
+| **Date Util** | dayjs | ^1.11 | 軽量な日時操作 |
+| **Error Boundary** | react-error-boundary | ^6.1 | Suspense と組み合わせた宣言的エラー処理 |
+| **Icons** | lucide-react | ^0.564 | Tailwind と統合、tree-shakeable |
 
-### 주목할 불채택 기술들
-- ❌ **React Hook Form + Zod**: 분석 답변은 Tiptap 에디터 중심, 간단한 form은 `useState` + 수동 검증으로 충분
-- ❌ **Prettier**: 팀 규모에서 ESLint만으로 충분한 코드 일관성 유지
-- ❌ **Jest/Vitest**: 현재 E2E 테스트 우선순위 (로드맵 항목)
+### 採用しなかった技術
+
+- ❌ **React Hook Form + Zod**: 分析回答は Tiptap エディタ中心で RHF との統合が難しく、単純なフォームには `useState` + 手動バリデーションで十分
+- ❌ **Prettier**: チーム規模では ESLint ルールのみで十分なコード一貫性を維持
+- ❌ **Jest/Vitest**: 現時点ではテストよりも機能開発を優先（ロードマップ項目）
 
 ---
 
-## 🏗️ 아키텍처
+## 🏗️ アーキテクチャ
 
-### 계층 구조 (FSD: Feature-Sliced Design)
+### レイヤー構造 (FSD: Feature-Sliced Design)
 
 ```
 ┌─────────────────────────────────────┐
 │     Browser / Next.js (SSR)         │
 ├─────────────────────────────────────┤
-│  Pages (app/)                       │  라우팅, 메타데이터, 레이아웃
+│  Pages (app/)                       │  ルーティング、メタデータ、レイアウト
 ├─────────────────────────────────────┤
-│  Widgets                            │  화면 단위 조립 (header, board-main, etc)
+│  Widgets                            │  画面単位の組み立て (header, board-main など)
 ├─────────────────────────────────────┤
-│  Features                           │  사용자 인터랙션 단위 (post-like, alarm-read, etc)
+│  Features                           │  ユーザーインタラクション単位 (post-like など)
 ├─────────────────────────────────────┤
-│  Entities                           │  도메인 모델 + TanStack Query hooks
+│  Entities                           │  ドメインモデル + TanStack Query hooks
 ├─────────────────────────────────────┤
 │  Shared                             │
-│  ├─ api/                           │  Axios 인스턴스 + auth API
-│  ├─ lib/                           │  hooks, sanitize, events
-│  └─ ui/                            │  재사용 컴포넌트 (shadcn base)
+│  ├─ api/                           │  Axios インスタンス + auth API
+│  ├─ lib/                           │  共通 hooks、sanitize、events
+│  └─ ui/                            │  再利用 UI コンポーネント (shadcn base)
 └─────────────────────────────────────┘
 ```
 
-### 핵심 통신 흐름
+### コア通信フロー
 
 ```
 [Component]
-   ↓ (useLoginRequired 가드)
+   ↓ (useLoginRequired ガード)
    ↓ (useMutation / useQuery)
 [TanStack Query Client]
    ↓
 [Axios Interceptor]
    ├─ 401 → window.dispatchEvent('auth:logout')
-   ├─ 403 "약관" → window.dispatchEvent('auth:terms-required')
-   ├─ 403 "정지" → window.dispatchEvent('auth:account-banned')
-   └─ 403 기타 → 200ms 후 1회 재시도 (CSRF 워크어라운드)
+   ├─ 403 "利用規約" → window.dispatchEvent('auth:terms-required')
+   ├─ 403 "停止" → window.dispatchEvent('auth:account-banned')
+   └─ 403 その他 → 200ms 後に 1 回自動リトライ (CSRF タイミング回避)
    ↓
-[Backend API (Spring Boot, 별도 repo)]
+[Backend API (Spring Boot, 別 repo)]
    ↓
-[AuthProvider (전역)]
-   └─ window events 수신 → 모달 표시 + 리다이렉트
+[AuthProvider (全体)]
+   └─ window events 受信 → モーダル表示 + リダイレクト
 ```
 
-### 인증 전략
+### 認証戦略
 
-- **방식**: Google OAuth2 → Session Cookie (`withCredentials: true`)
-- **CSRF 보호**: XSRF-TOKEN 쿠키 자동 읽기 → X-XSRF-TOKEN 헤더 주입 (`src/shared/api/apiClient.ts:14-20`)
-- **세션 만료**: 401 응답 → `auth:logout` 이벤트 → `AuthProvider` 수신 → 모달 표시 + `/login` 리다이렉트
-- **역할 기반 리다이렉트**: 로그인 직후 `role === 'ADMIN'` → `/admin/inquiries` (sessionStorage로 1회 가드)
+- **方式**: Google OAuth2 → Session Cookie (`withCredentials: true`)
+- **CSRF 保護**: XSRF-TOKEN クッキー自動読み取り → X-XSRF-TOKEN ヘッダー注入 (`src/shared/api/apiClient.ts:14-20`)
+- **セッション期限切れ**: 401 レスポンス → `auth:logout` イベント → `AuthProvider` 受信 → モーダル + `/login` リダイレクト
+- **ロール別リダイレクト**: ログイン直後 `role === 'ADMIN'` → `/admin/inquiries` (sessionStorage で 1 回のみ)
 
 ---
 
-## 📁 폴더 구조 (책임 명시)
+## 📁 フォルダ構成 (責務付き)
 
 ```
 src/
 ├── app/                                    # Next.js App Router
-│   ├── (with-layout)/                     # Header/Footer 포함 라우트 그룹
-│   │   ├── page.tsx                       # 홈
-│   │   ├── about/                         # 소개
-│   │   ├── boards/                        # 게시판 (list, detail, write, edit)
-│   │   ├── analysis/                      # 자기분석 (list, detail-edit)
-│   │   ├── inquiries/                     # 1:1 문의
-│   │   ├── mypage/                        # 마이페이지 (profile, boards, comments)
-│   │   ├── alarms/                        # 알림함
-│   │   ├── admin/                         # 관리자 (inquiries, users 관리)
-│   │   └── ...
-│   ├── login/                             # 로그인 (레이아웃 없음)
-│   ├── terms/                             # 약관 (레이아웃 없음)
-│   ├── layout.tsx                         # Root 레이아웃 (providers 포함)
+│   ├── (with-layout)/                     # Header/Footer 付きルートグループ
+│   │   ├── page.tsx                       # ホーム
+│   │   ├── about/                         # サービス紹介
+│   │   ├── boards/                        # 掲示板 (list, detail, write, edit)
+│   │   ├── analysis/                      # 自己分析 (list, detail-edit)
+│   │   ├── inquiries/                     # 1:1 お問い合わせ
+│   │   ├── mypage/                        # マイページ (profile, boards, comments)
+│   │   ├── alarms/                        # 通知一覧
+│   │   └── admin/                         # 管理者 (inquiries, users 管理)
+│   ├── login/                             # ログイン (レイアウトなし)
+│   ├── terms/                             # 利用規約 (レイアウトなし)
+│   ├── layout.tsx                         # Root レイアウト (providers 含む)
 │   ├── providers/
-│   │   ├── TanStackProvider.tsx            # TanStack Query 기본값
-│   │   ├── AuthProvider.tsx                # 세션/로그인 관리, 이벤트 버스
-│   │   └── ModalProvider.tsx               # Zustand 모달 렌더러
+│   │   ├── TanStackProvider.tsx            # TanStack Query デフォルト設定
+│   │   ├── AuthProvider.tsx                # セッション管理、イベントバス
+│   │   └── ModalProvider.tsx               # Zustand モーダルレンダラー
 │   └── store/
-│       ├── useModalStore.ts                # 글로벌 모달 (priority 시스템)
-│       └── useAlarmStore.ts                # 알람 패널 open/close
+│       ├── useModalStore.ts                # グローバルモーダル (priority システム)
+│       └── useAlarmStore.ts                # 通知パネル open/close
 │
-├── widgets/                               # 페이지 단위 조립 컴포넌트
-│   ├── header.tsx
-│   ├── footer.tsx
-│   ├── board-main.tsx
-│   ├── board-detail.tsx
-│   ├── analysis-main.tsx
-│   ├── admin-inquiries.tsx
+├── widgets/                               # ページ単位の組み立てコンポーネント
+│   ├── header/
+│   ├── footer/
+│   ├── board-main/
+│   ├── board-detail/
+│   ├── analysis-main/
+│   ├── admin-inquiries/
 │   └── ...
 │
-├── features/                              # 사용자 인터랙션 단위
+├── features/                              # ユーザーインタラクション単位
 │   ├── auth/
-│   │   ├── model/
-│   │   │   └── login.ts                   # Google OAuth 리다이렉트
-│   │   └── ui/
-│   │       └── LoginForm.tsx
+│   │   └── model/login.ts                 # Google OAuth リダイレクト
 │   ├── post-like/
-│   │   ├── model/
-│   │   │   └── useToggleLike.ts            # 낙관적 업데이트 + rollback
-│   │   └── ui/
-│   │       └── LikeButton.tsx
+│   │   └── model/useToggleLike.ts         # 楽観的更新 + rollback
 │   ├── comment-create/
 │   ├── alarm-read-one/
 │   ├── alarm-read-all/
 │   └── ...
 │
-├── entities/                              # 도메인 모델 + query hooks
+├── entities/                              # ドメインモデル + query hooks
 │   ├── auth/
-│   │   ├── model/
-│   │   │   ├── useAuth.ts                 # GET /api/me (useSuspenseQuery)
-│   │   │   └── types.ts
-│   │   └── api/
-│   │       └── auth.ts                    # authApi (logout, agreements)
+│   │   └── model/useAuth.ts              # GET /api/me (useSuspenseQuery)
 │   ├── post/
-│   │   ├── model/
-│   │   │   ├── postQueryKeys.ts           # Query key factory
-│   │   │   ├── usePostsQuery.ts           # GET /posts (useQuery)
-│   │   │   ├── usePostDetail.ts           # GET /posts/[id] (useSuspenseQuery)
-│   │   │   └── types.ts
-│   │   └── api/
-│   │       └── posts.ts
+│   │   └── model/postQueryKeys.ts        # Query key factory
 │   ├── alarm/
-│   │   ├── model/
-│   │   │   ├── alarmQueryKeys.ts
-│   │   │   ├── useHasUnreadQuery.ts       # 배지 폴링 (refetchInterval: 30_000)
-│   │   │   ├── useAlarmsInfiniteQuery.ts  # 무한스크롤
-│   │   │   └── types.ts
-│   │   └── api/
-│   │       └── alarms.ts
+│   │   ├── model/useHasUnreadQuery.ts    # バッジポーリング (refetchInterval: 30s)
+│   │   └── model/useAlarmsInfiniteQuery.ts # 無限スクロール
 │   └── ...
 │
-└── shared/                                # 공유 인프라
+└── shared/                                # 共有インフラ
     ├── api/
-    │   ├── apiClient.ts                   # Axios 인스턴스 (CSRF + 401 처리)
-    │   ├── auth.ts                        # authApi 객체
-    │   └── index.ts                       # 재내보내기
+    │   ├── apiClient.ts                   # Axios インスタンス (CSRF + 401 処理)
+    │   └── auth.ts                        # authApi オブジェクト
     ├── lib/
-    │   ├── hooks/
-    │   │   ├── useLoginRequired.ts         # 로그인 체크 + 모달
-    │   │   └── usePagination.ts           # pagination 유틸
-    │   ├── sanitize.ts                    # DOMPurify 래퍼
-    │   ├── events.ts                      # 사용자정의 이벤트 타입
-    │   └── utils.ts
+    │   ├── hooks/useLoginRequired.ts      # ログインチェック + モーダル
+    │   ├── hooks/usePagination.ts         # ページネーションユーティリティ
+    │   ├── sanitize.ts                    # DOMPurify ラッパー
+    │   └── events.ts                      # カスタムイベント型定義
     └── ui/
-        ├── tiptap-editor.tsx              # 리치텍스트 에디터 (공유)
+        ├── tiptap-editor.tsx              # リッチテキストエディタ (共有)
         ├── ErrorBoundaryWrapper.tsx       # Suspense + ErrorBoundary
-        ├── Button.tsx                     # shadcn base
-        ├── Modal.tsx
         └── ... (shadcn components)
 ```
 
 ---
 
-## 🔌 API 연동 스펙
+## 🔌 API 連携仕様
 
-### 기본 설정
+### 基本設定
 
 ```typescript
 // .env.local
 NEXT_PUBLIC_API_NIP_URL=https://api.example.com
 ```
 
-**Note**: 모든 API 호출은 Next.js의 same-origin 프록시를 통해 진행 (BFF 패턴).
-클라이언트는 `/api/*` → Next.js Route Handler → 백엔드 API로 리다이렉트.
+**Note**: すべての API 呼び出しは Next.js の same-origin プロキシ経由 (BFF パターン)。  
+クライアント → `/api/*` → Next.js Route Handler → バックエンド API。
 
-### 인증 방식
+### 認証方式
 
 - **Session Cookie** (`withCredentials: true`)
-- **CSRF Token**: 쿠키의 XSRF-TOKEN 값 → `X-XSRF-TOKEN` 헤더로 주입
-- **구현**: `src/shared/api/apiClient.ts:14-20`
+- **CSRF Token**: クッキーの XSRF-TOKEN 値 → `X-XSRF-TOKEN` ヘッダーへ注入
+- **実装**: `src/shared/api/apiClient.ts:14-20`
 
-### 에러 처리 전략
+### エラー処理方針
 
-| 상태 | 동작 | 구현 |
+| ステータス | 動作 | 実装箇所 |
 |---|---|---|
-| `401` | `auth:logout` 이벤트 → 세션 만료 모달 → `/login` 리다이렉트 | `apiClient.ts:52-58` |
-| `403` "약관 동의" | `auth:terms-required` 이벤트 → `/terms` 리다이렉트 | `apiClient.ts:59-61` |
-| `403` "정지" | `auth:account-banned` 이벤트 → 정지 모달 | `apiClient.ts:62-64` |
-| `403` 기타 | 200ms 후 **1회 자동 재시도** (CSRF 타이밍 워크어라운드) | `apiClient.ts:65-71` |
-| `5xx` | 토스트 에러 메시지 표시 | Error boundary |
+| `401` | `auth:logout` イベント → セッション期限切れモーダル → `/login` | `apiClient.ts:52-58` |
+| `403` "利用規約" | `auth:terms-required` イベント → `/terms` リダイレクト | `apiClient.ts:59-61` |
+| `403` "停止" | `auth:account-banned` イベント → 停止モーダル | `apiClient.ts:62-64` |
+| `403` その他 | 200ms 後に **1 回自動リトライ** (CSRF タイミング回避) | `apiClient.ts:65-71` |
+| `5xx` | トーストエラーメッセージ表示 | Error boundary |
 
-### 타입 관리
+### 型管理
 
-TypeScript 인터페이스 수동 정의 (`entities/*/types.ts`).  
-→ **이유**: Zod 기반 생성은 런타임 검증 오버헤드 vs 백엔드 타입 신뢰도 높음.
+TypeScript インターフェースを手動定義 (`entities/*/types.ts`)。  
+→ **理由**: Zod によるランタイム検証オーバーヘッド vs バックエンド型への信頼度のトレードオフで手動定義を選択。
 
-### 주요 Endpoint 표 (8개)
+### 主要エンドポイント (8 件)
 
-| Method | Endpoint | 쿼리 | 용도 |
+| Method | Endpoint | クエリ | 用途 |
 |---|---|---|---|
-| `GET` | `/api/me` | - | 현재 로그인 유저 조회 (useSuspenseQuery) |
-| `GET` | `/api/posts` | `page=1&limit=10` | 게시글 목록 (pagination) |
-| `GET` | `/api/posts/:id` | - | 게시글 상세 + 댓글 (useSuspenseQuery) |
-| `POST` | `/api/posts/:id/like` | - | 게시글 좋아요 (낙관적 업데이트) |
-| `GET` | `/api/alarms` | `page=1` | 알림 목록 (useInfiniteQuery) |
-| `GET` | `/api/alarms/has-unread` | - | 미읽음 배지 (refetchInterval: 30s) |
-| `GET` | `/api/analysis` | - | 자기분석 질문 목록 |
-| `POST` | `/api/agreements` | `{ type: 'TERMS' }` | 약관 동의 |
+| `GET` | `/api/me` | - | ログインユーザー取得 (useSuspenseQuery) |
+| `GET` | `/api/posts` | `page=1&limit=10` | 投稿一覧 (ページネーション) |
+| `GET` | `/api/posts/:id` | - | 投稿詳細 + コメント (useSuspenseQuery) |
+| `POST` | `/api/posts/:id/like` | - | いいね切り替え (楽観的更新) |
+| `GET` | `/api/alarms` | `page=1` | 通知一覧 (useInfiniteQuery) |
+| `GET` | `/api/alarms/has-unread` | - | 未読バッジ (refetchInterval: 30s) |
+| `GET` | `/api/analysis` | - | 自己分析質問一覧 |
+| `POST` | `/api/agreements` | `{ type: 'TERMS' }` | 利用規約同意 |
 
 ---
 
-## 🧠 상태관리 전략 (이게 차이를 만듭니다)
+## 🧠 状態管理戦略
 
 ### Server State (TanStack Query v5)
 
-**설정** (`src/app/providers/TanStackProvider.tsx`):
+**デフォルト設定** (`src/app/providers/TanStackProvider.tsx`):
 ```typescript
-staleTime: 1000 * 60,        // 1분 이내 재요청 없음
-gcTime: 1000 * 60 * 5,       // 5분 이후 메모리 해제
-retry: 1,                    // 1회 자동 재시도
-refetchOnWindowFocus: false, // 탭 전환 시 자동 갱신 안 함
+staleTime: 1000 * 60,        // 1 分以内は再リクエストしない
+gcTime: 1000 * 60 * 5,       // 5 分後にメモリ解放
+retry: 1,                    // 1 回自動リトライ
+refetchOnWindowFocus: false, // タブ切り替え時の自動更新なし
 ```
 
-**Query Key Factory 패턴** (스코프 무효화):
+**Query Key Factory パターン** (スコープ無効化):
 ```typescript
 // src/entities/post/model/postQueryKeys.ts
 postQueryKeys = {
@@ -276,28 +271,24 @@ postQueryKeys = {
   detail: (id) => ['posts', 'detail', id],
 };
 
-// 게시글 작성 후 → invalidate scoped
+// 投稿作成後 → スコープ無効化
 queryClient.invalidateQueries({ queryKey: postQueryKeys.lists })
-// → 모든 list page들 갱신, detail은 그대로
+// → すべての list ページを更新、detail はそのまま
 ```
 
-**폴링** (알림 배지):
+**ポーリング** (通知バッジ):
 ```typescript
 // src/entities/alarm/model/useHasUnreadQuery.ts
 useQuery({
-  queryKey: alarmQueryKeys.hasUnread(),
-  queryFn: () => api.getHasUnread(),
-  refetchInterval: 30_000,  // 30초마다 폴링
-  enabled: !!user,          // 로그인 시에만
+  refetchInterval: 30_000,  // 30 秒ごとにポーリング
+  enabled: !!user,          // ログイン時のみ有効
 });
 ```
 
-**무한스크롤** (알림 목록):
+**無限スクロール** (通知一覧):
 ```typescript
 // src/entities/alarm/model/useAlarmsInfiniteQuery.ts
 useInfiniteQuery({
-  queryKey: alarmQueryKeys.infinite(),
-  queryFn: ({ pageParam }) => api.getAlarms(pageParam),
   getNextPageParam: (lastPage, pages) => {
     const fetched = pages.length * LIMIT;
     return fetched < totalCount ? fetched : undefined;
@@ -308,48 +299,43 @@ useInfiniteQuery({
 
 ### Client State (Zustand v5)
 
-**글로벌 모달** (priority 시스템):
+**グローバルモーダル** (priority システム):
 ```typescript
 // src/app/store/useModalStore.ts
-type Modal = { id: string; priority: number; /* ... */ };
+enum MODAL_PRIORITY {
+  DEFAULT = 0,   // 通常のモーダル
+  HIGH = 10,     // セッション期限切れ、利用規約、停止通知
+}
+
 openModal(modal) {
-  if (modal.priority < current?.priority) return; // 낮은 우선순위 무시
+  if (modal.priority < current?.priority) return; // 低優先度は無視
 }
 ```
 
-→ **이유**: 세션 만료(HIGH:10) 모달이 일반 모달(DEFAULT:0)에 가려지는 문제 해결.
-
-**알람 패널** (on/off):
-```typescript
-useAlarmStore((s) => s.isOpen);
-```
+→ **理由**: セッション期限切れ (HIGH:10) モーダルが通常モーダル (DEFAULT:0) に隠れる問題を解決。
 
 ### Form State
 
-**전략**: `useState` + 수동 검증
+**戦略**: `useState` + 手動バリデーション
 
-→ **이유**:
-- 분석 답변: Tiptap 에디터 (RHF와 호환 어려움)
-- 게시글: 제목/내용 간단 → RHF 오버엔지니어링
-- 1:1 문의: 제목/내용 + 이미지 없음 (presigned URL 불필요)
+→ **理由**:
+- 分析回答: Tiptap エディタ中心 → RHF との統合が難しい
+- 掲示板投稿: タイトル/本文のみ → RHF はオーバーエンジニアリング
 
 ---
 
-## 🔑 중요 구현 포인트 (4개 — 면접 주제)
+## 🔑 重要実装ポイント (面接トピック 4 件)
 
-### 1️⃣ **낙관적 업데이트 (좋아요)**
+### 1️⃣ 楽観的更新 (いいね)
 
-**문제**: 서버 응답 대기 중 버튼이 반응하지 않으면 UX 저하.
+**課題**: サーバーレスポンス待ちでボタンが反応しない → UX 低下。
 
-**해결** (`src/features/post-like/ui/LikeButton.tsx`):
+**アプローチ** (`src/features/post-like/ui/LikeButton.tsx`):
 ```typescript
 useMutation({
-  mutationFn: () => api.toggleLike(postId),
   onMutate: async () => {
     await queryClient.cancelQueries({ queryKey: detailKey });
     const previous = queryClient.getQueryData(detailKey);
-    
-    // 즉시 UI 업데이트
     queryClient.setQueryData(detailKey, (old) => ({
       ...old,
       isLiked: !old.isLiked,
@@ -358,273 +344,186 @@ useMutation({
     return { previous };
   },
   onError: (_err, _vars, context) => {
-    // 서버 실패 시 롤백
-    queryClient.setQueryData(detailKey, context.previous);
+    queryClient.setQueryData(detailKey, context.previous); // ロールバック
   },
 });
 ```
 
-**트레이드오프**:
-- ✅ 즉각적인 피드백 (클릭 → 바로 변화)
-- ❌ 상태 분기 복잡도 증가 (로컬 상태 + 캐시)
+**トレードオフ**:
+- ✅ クリック即反応
+- ❌ ローカル状態 + キャッシュの分岐で複雑度が増す
 
 ---
 
-### 2️⃣ **세션 이벤트 버스**
+### 2️⃣ セッションイベントバス
 
-**문제**: 어디서든 401 발생 → 모든 곳에서 일관된 처리 필요.
+**課題**: どのコンポーネントからでも 401 発生時に一貫した処理が必要。
 
-**해결** (3단계):
-
-**Step 1**: Axios 인터셉터 (중앙 처리)
+**アプローチ** (3 ステップ):
 ```typescript
-// src/shared/api/apiClient.ts:52-58
-response interceptor: (err) => {
-  if (err.status === 401 && url !== '/api/me') {
-    window.dispatchEvent(new Event('auth:logout'));
-  }
-}
+// Step 1: Axios インターセプタで発火
+window.dispatchEvent(new Event('auth:logout'));
+
+// Step 2: 型定義 (src/shared/lib/events.ts)
+interface WindowEventMap { 'auth:logout': Event; }
+
+// Step 3: AuthProvider で受信 (src/app/providers/AuthProvider.tsx)
+window.addEventListener('auth:logout', () => { openModal(); redirect('/login'); });
 ```
 
-**Step 2**: 전역 이벤트 정의
-```typescript
-// src/shared/lib/events.ts
-declare global {
-  interface WindowEventMap {
-    'auth:logout': Event;
-    'auth:terms-required': Event;
-    'auth:account-banned': Event;
-  }
-}
-```
-
-**Step 3**: AuthProvider가 수신
-```typescript
-// src/app/providers/AuthProvider.tsx
-useEffect(() => {
-  window.addEventListener('auth:logout', () => {
-    openModal('sessionExpired');
-    redirect('/login');
-  });
-}, []);
-```
-
-**트레이드오프**:
-- ✅ 인터셉터-UI 의존 제거 → 느슨한 결합
-- ❌ 전역 이벤트 의존 → 테스트 어려움, MSW mocking 필요
+**トレードオフ**:
+- ✅ インターセプタ - UI 間の直接依存を排除
+- ❌ グローバルイベント依存でテストが難しい
 
 ---
 
-### 3️⃣ **우선순위 모달**
+### 3️⃣ 優先度モーダル
 
-**문제**: 여러 모달이 동시에 발생할 때 순서 제어 필요.
+**課題**: 複数のモーダルが同時発生した場合の順序制御。
 
-**예시 상황**:
-- 게시글 좋아요 실패 → 일반 토스트
-- 동시에 세션 만료 → 세션 모달 덮힘 ❌
-
-**해결** (`src/app/store/useModalStore.ts`):
+**アプローチ** (`src/app/store/useModalStore.ts`):
 ```typescript
-enum MODAL_PRIORITY {
-  DEFAULT = 0,   // 일반 토스트, 일반 모달
-  HIGH = 10,     // 세션 만료, 약관 동의, 정지 알림
-}
-
 openModal(modal) {
-  const current = state.modals[0];
-  if (current && modal.priority <= current.priority) {
-    console.warn('Modal dropped (lower priority)');
-    return;
-  }
-  // 추가
+  if (modal.priority <= current?.priority) return; // 低優先度を破棄
 }
 ```
 
-**트레이드오프**:
-- ✅ 중요한 모달 보장
-- ❌ 낮은 우선순위 모달 손실 (사용자가 알지 못함)
+**トレードオフ**:
+- ✅ 重要なモーダルが必ず表示される
+- ❌ 低優先度モーダルが消える（ユーザーには知らせられない）
 
 ---
 
-### 4️⃣ **무한스크롤 (알림)**
+### 4️⃣ 無限スクロール (通知)
 
-**문제**: 100+ 알림을 pagination 아이콘 클릭으로 불편.
+**課題**: 100 件以上の通知をページネーションボタンで操作するのは不便。
 
-**해결** (`src/widgets/alarm-panel/ui/AlarmsPageClient.tsx`):
+**アプローチ** (`src/widgets/alarm-panel/ui/AlarmsPageClient.tsx`):
 ```typescript
-const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-  queryKey: alarmQueryKeys.infinite(),
-  queryFn: ({ pageParam }) => api.getAlarms(pageParam),
-  initialPageParam: 0,
-  getNextPageParam: (lastPage, pages) => {
-    const fetched = pages.length * LIMIT;
-    return fetched < lastPage.total ? fetched : undefined;
-  },
+const observer = new IntersectionObserver(([entry]) => {
+  if (entry.isIntersecting && hasNextPage) fetchNextPage();
 });
-
-// UI 로직
-useEffect(() => {
-  const observer = new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting && hasNextPage) {
-      fetchNextPage();
-    }
-  });
-  observer.observe(sentinelRef.current!);
-  return () => observer.disconnect();
-}, [hasNextPage]);
+observer.observe(sentinelRef.current!);
 ```
 
-**트레이드오프**:
-- ✅ 자연스러운 로딩 (사용자 스크롤과 동시)
-- ❌ 뒤로 가기 시 스크롤 위치 복원 불완전 (Next.js 라우터 제약)
+**トレードオフ**:
+- ✅ スクロールと同時に自然なローディング
+- ❌ ブラウザバック時のスクロール位置復元が不完全 (Next.js Router の制約)
 
 ---
 
-## ⚡ Performance / UX
+## ⚡ パフォーマンス / UX
 
-| 항목 | 구현 | 효과 |
+| 項目 | 実装 | 効果 |
 |---|---|---|
-| **React Compiler** | `babel-plugin-react-compiler` | 자동 메모이제이션 (렌더링 스킵) |
-| **Suspense + Error Boundary** | `useSuspenseQuery` + `ErrorBoundaryWrapper` | 선언적 로딩/에러 처리 |
-| **Query Caching** | `staleTime: 60s` | 불필요한 API 재호출 방지 |
-| **HTML Sanitize** | `DOMPurify` | XSS 방지 (Tiptap HTML 출력) |
-| **Lazy Image Loading** | `next/image with { priority: false }` | LCP 개선 |
-| **Code Splitting** | Next.js 기본 (App Router) | 페이지별 JS 번들 최소화 |
+| **React Compiler** | `babel-plugin-react-compiler` | 自動メモ化（再レンダリングスキップ） |
+| **Suspense + Error Boundary** | `useSuspenseQuery` + `ErrorBoundaryWrapper` | 宣言的ローディング/エラー処理 |
+| **Query Caching** | `staleTime: 60s` | 不要な API 再呼び出し防止 |
+| **HTML Sanitize** | `DOMPurify` | XSS 防止 (Tiptap HTML 出力) |
+| **Code Splitting** | Next.js 標準 (App Router) | ページ別 JS バンドル最小化 |
 
 ---
 
-## ✅ 품질 & 빌드
+## ✅ 品質 & ビルド
 
 ### ESLint
 ```bash
 npm run lint
 ```
-설정: `eslint.config.mjs` (flat config v9)
+設定: `eslint.config.mjs` (flat config v9)
 - `eslint-config-next/core-web-vitals`
 - `eslint-config-next/typescript`
-- 무시: `.next`, `out`, `build`
 
 ### Prettier
-미설정 (팀 규모에서 ESLint 규칙만으로 충분).
+未設定（チーム規模では ESLint ルールのみで十分）。
 
-### Test
-**현재**: 미작성.  
-**로드맵**: MSW + Vitest 기반 구축 (섹션 14 참고).
+### テスト
+**現状**: 未作成。  
+**ロードマップ**: MSW + Vitest ベースのテスト環境構築予定。
 
-### 빌드
+### ビルド
 ```bash
-npm run build   # 타입 체크 + lint + SSR 빌드
-npm run dev     # 개발 서버 (localhost:3000)
+npm run build   # 型チェック + lint + SSR ビルド
+npm run dev     # 開発サーバー (localhost:3000)
 ```
 
 ---
 
-## 🚀 로컬 실행
-
-### 준비
+## 🚀 ローカル起動
 
 ```bash
-# 1. 저장소 클론
+# 1. リポジトリをクローン
 git clone https://github.com/wyLortel/miru-frontend.git
 cd miru-frontend
 
-# 2. 의존성 설치
+# 2. 依存関係インストール
 npm install
 
-# 3. 환경 변수 설정
+# 3. 環境変数設定
 cp .env.example .env.local
-# .env.local 편집
+# .env.local を編集
 # NEXT_PUBLIC_API_NIP_URL=https://api.example.com
-```
 
-### 실행
-
-```bash
-# 개발 서버
+# 4. 開発サーバー起動
 npm run dev
-# → http://localhost:3000 접속
-
-# 빌드 + 프로덕션 실행
-npm run build
-npm start
+# → http://localhost:3000
 ```
 
 ---
 
-## 👤 담당 범위
+## 👥 担当範囲
 
-**이 레포는 프론트엔드 전담입니다.**
+**このリポジトリはフロントエンド専任です。**
 
-| 영역 | 담당 |
+| メンバー構成 | 役割 |
 |---|---|
-| UI/UX, 라우팅, 상태관리, API 호출 | miru-frontend (본 repo) |
-| 백엔드 API, 인증, DB | 별도 Spring Boot repo |
+| フロントエンド 2 名 | UI/UX、ルーティング、状態管理、API 連携 |
+| バックエンド 1 名 | Spring Boot API、認証、DB |
+
+### 自分の担当機能
+
+| 機能 | 担当箇所 |
+|---|---|
+| **コミュニティ掲示板** | 投稿一覧・詳細・作成・編集・削除、いいね（楽観的更新）、コメント/返信 |
+| **通知** | 未読バッジ（ポーリング）、通知一覧（無限スクロール）、既読処理 |
+| **1:1 お問い合わせ** | 問い合わせ作成・一覧・詳細、管理者回答の確認 |
+| **ヘッダー / フッター** | ナビゲーション、通知パネル、認証状態の UI 反映 |
 
 ---
 
-## 🗺️ Roadmap (개선 계획 3개)
+## 🗺️ ロードマップ (改善計画 3 件)
 
-### 1. MSW + Vitest 기반 테스트 환경
-**목표**: API 모킹으로 독립적인 unit/component 테스트 작성.  
-**우선순위**: 높음 (현재 테스트 0).  
-**작업**:
-- `msw` 설치 + handler 정의
-- `@testing-library/react` + `vitest` 설정
-- 주요 hooks (useAuth, usePostsQuery, useMutation) 테스트 추가
+### 1. ユーザー自身によるカスタム質問追加
 
-### 2. React Hook Form + Zod 도입
-**목표**: 수동 검증 통일화 + 폼 에러 UI 자동화.  
-**현재**: form state = `useState` + 수동 검증.  
-**작업**:
-- `react-hook-form`, `zod` 추가
-- `PostWriteForm`, `InquiryWriteForm` 마이그레이션
-- Tiptap 에디터와 RHF 통합 (custom register)
+**背景**: 実際のユーザーフィードバックで「自分が考えたい質問を追加したい」という要望が多数。  
+**目標**: 既存の自己分析質問リストに加えて、ユーザー独自の質問を作成・管理できる機能。  
+**作業**:
+- カスタム質問 CRUD エンドポイント連携
+- 既存質問リストとの統合表示
+- 削除/非表示の状態管理
 
-### 3. Bundle Analyzer + Tiptap 최적화
-**목표**: 초기 로딩 속도 개선.  
-**현재**: Tiptap 기본 starterkit 전체 포함 (~50KB gzip).  
-**작업**:
-- `@next/bundle-analyzer` 설치
-- Tiptap extensions tree-shaking (필요한 것만)
-- 이미지 최적화 (next/image 적극 활용)
-- **목표 Lighthouse**: LCP < 2.5s, CLS < 0.1
+### 2. 自己分析質問へのタグ追加 + フィルタリング
 
----
+**背景**: 質問数が増えるにつれて「志望動機系」「強み/弱み系」など分類して見たいという要望。  
+**目標**: 各質問にタグを付与し、タグ別フィルタで絞り込み表示できるようにする。  
+**作業**:
+- タグ定義 (カテゴリ: 志望動機・自己PR・経験・価値観 など)
+- フィルタ UI の実装
+- Query Key にフィルタ条件を含めたキャッシュ設計
 
-## 💡 자주 하는 실수와 대책
+### 3. MSW + Vitest テスト環境構築
 
-### 401 무한 리트라이 문제
-**증상**: 로그인 후 API 호출 시 401 → 자동 재시도 → 401 → ... (무한 루프).  
-**원인**: 새 XSRF 토큰 받기 전에 API 호출.  
-**대책** (`src/shared/api/apiClient.ts:65-71`):
-```typescript
-// 403 응답에만 1회 재시도 (CSRF 토큰 갱신 대기)
-if (err.status === 403 && !err.config._csrfRetried) {
-  await new Promise(r => setTimeout(r, 200));
-  err.config._csrfRetried = true;
-  return apiClient(err.config);
-}
-```
-
-### 폼 이중 제출
-**증상**: 버튼 빠른 연속 클릭 → 중복 요청.  
-**대책**:
-```typescript
-const { mutate, isPending } = useMutation({ /* ... */ });
-
-<button 
-  onClick={() => mutate(data)} 
-  disabled={isPending}  // ← 필수
->
-  {isPending ? '제출 중...' : '제출'}
-</button>
-```
+**目標**: API モックによる独立した unit/component テスト作成。  
+**作業**:
+- `msw` インストール + handler 定義
+- `@testing-library/react` + `vitest` 設定
+- 主要 hooks (useAuth, usePostsQuery, useMutation) テスト追加
 
 ---
 
-## 📖 참고 자료
+## 📖 参考資料
 
-- [Next.js 공식 문서](https://nextjs.org/docs)
+- [Next.js 公式ドキュメント](https://nextjs.org/docs)
 - [TanStack Query v5](https://tanstack.com/query/v5)
 - [Zustand](https://github.com/pmndrs/zustand)
 - [Tiptap](https://tiptap.dev)
