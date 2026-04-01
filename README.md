@@ -79,9 +79,9 @@
 
 | 分野 | ライブラリ | バージョン | 選定理由 |
 |---|---|---|---|
-| **Framework** | Next.js | 16.1.6 | SSR + Route Handler で BFF(Backend For Frontend) 役割を担う |
+| **Framework** | Next.js | 16.1.6 | CSR・SSR を柔軟に使い分けられる。静的ページは SSR で SEO を確保しつつ、インタラクティブな操作は CSR で対応 |
 | **Language** | TypeScript | ^5 | 型安全性、チーム開発の効率化 |
-| **Styling** | Tailwind CSS + shadcn/ui | v4.1.18 + ^3.8.4 | ユーティリティファースト CSS、コンポーネントのカスタマイズ自由度が高い |
+| **Styling** | Tailwind CSS + shadcn/ui | v4.1.18 + ^3.8.4 | クラス名でスタイルが一目でわかり、修正箇所をすぐ特定できる。shadcn/ui との組み合わせでデザインの統一性を保ちながら、素早く UI を構築できる |
 | **Server State** | TanStack Query | ^5.90 | キャッシュ/無効化の細粒度制御、staleTime/gcTime 戦略で API 呼び出し最小化 |
 | **Client State** | Zustand | ^5.0 | グローバル UI 状態（モーダル/通知パネル）を最小限に管理、ボイラープレート不要 |
 | **HTTP Client** | Axios | ^1.13 | インターセプタによる CSRF/401 処理の一元化 |
