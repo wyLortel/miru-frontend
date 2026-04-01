@@ -18,6 +18,12 @@ dayjs.locale('ko');
  * - 작년 이전    → "2024년 11월 5일"
  */
 export function formatDate(isoString: string): string {
+  const isDateOnly = /^\d{4}\.\d{2}\.\d{2}$/.test(isoString);
+  if (isDateOnly) {
+    const date = dayjs(isoString.replace(/\./g, '-'));
+    return date.format('YYYY년 M월 D일');
+  }
+
   const date = dayjs.utc(isoString).local();
   const now = dayjs();
   const diffMin = now.diff(date, 'minute');
