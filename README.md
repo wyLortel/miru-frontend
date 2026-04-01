@@ -70,11 +70,6 @@
 | **Error Boundary** | react-error-boundary | ^6.1 | Suspense と組み合わせた宣言的エラー処理 |
 | **Icons** | lucide-react | ^0.564 | Tailwind と統合、tree-shakeable |
 
-### 採用しなかった技術
-
-- ❌ **React Hook Form + Zod**: 分析回答は Tiptap エディタ中心で RHF との統合が難しく、単純なフォームには `useState` + 手動バリデーションで十分
-- ❌ **Prettier**: チーム規模では ESLint ルールのみで十分なコード一貫性を維持
-- ❌ **Jest/Vitest**: 現時点ではテストよりも機能開発を優先（ロードマップ項目）
 
 ---
 
