@@ -412,7 +412,7 @@ openModal(modal) {
 
 - **掲示板の最新性確保**
   - `staleTime: 0` と `refetchOnWindowFocus: true` を採用し、一覧の鮮度を優先
-  - `placeholderData` により、更新時の空白感を抑制
+  - `placeholderData` により、検索クエリ切り替え時の空白感を抑制
 - **画像表示の最適化**
   - 大きい画像は WebP 変換とリサイズを実施
   - 静的資産には `Cache-Control` を設定し、再訪問時の再利用性を向上
