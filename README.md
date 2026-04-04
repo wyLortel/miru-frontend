@@ -15,8 +15,6 @@
 - [API 連携仕様](#-api-連携仕様)
 - [状態管理戦略](#-状態管理戦略)
 - [重要実装ポイント](#-重要実装ポイント)
-- [パフォーマンス / UX](#-パフォーマンス--ux)
-- [品質 & ビルド](#-品質--ビルド)
 - [ローカル起動](#-ローカル起動)
 - [担当範囲](#-担当範囲)
 - [ロードマップ](#-ロードマップ-改善計画-3-件)
@@ -359,126 +357,144 @@ openModal(modal) {
 
 ---
 
-## 🔑 重要実装ポイント 
+## 🔑 重要実装ポイント
 
-### 1️⃣ 楽観的更新 (いいね)
+### 1️⃣ セキュリティ設計 — 信頼境界の明確化
 
-**課題**: サーバーレスポンス待ちでボタンが反応しない → UX 低下。
+**基本方針**: 「ユーザー入力・URL・アクセス経路は基本的に信頼しない」
 
-**アプローチ** (`src/features/post-like/ui/LikeButton.tsx`):
+#### XSS 対策 (`src/shared/lib/sanitize.ts`)
+Tiptap のリッチテキスト出力時、DOMPurify でホワイトリスト方式の サニタイズを実行。
+許可タグ・属性を限定し、危険なスクリプトタグやイベントハンドラを除去。
+
 ```typescript
-useMutation({
-  onMutate: async () => {
-    await queryClient.cancelQueries({ queryKey: detailKey });
-    const previous = queryClient.getQueryData(detailKey);
-    queryClient.setQueryData(detailKey, (old) => ({
-      ...old,
-      isLiked: !old.isLiked,
-      likeCount: old.likeCount + (old.isLiked ? -1 : 1),
-    }));
-    return { previous };
-  },
-  onError: (_err, _vars, context) => {
-    queryClient.setQueryData(detailKey, context.previous); // ロールバック
-  },
-});
+// 例: 強い・弱みの本文テキストを安全にレンダリング
+const safeHtml = sanitize(tiptapOutput);
+<div dangerouslySetInnerHTML={{ __html: safeHtml }} />
 ```
 
-**トレードオフ**:
-- ✅ クリック即反応
-- ❌ ローカル状態 + キャッシュの分岐で複雑度が増す
+#### Open Redirect 対策 (`src/shared/lib/validateUrl.ts`)
+redirect URL を **相対パスのみ** に限定。
+`//`, `javascript:`, 外部 URL は即座に遮断。
+
+```typescript
+// ✅ 許可: /mypage, /board/1
+// ❌ 拒否: //evil.com, javascript:alert(), http://...
+validateUrl(redirectPath) // → boolean
+```
+
+#### 非ログインアクセス遮断 (`src/shared/lib/hooks/useLoginRequired.ts`)
+認証が必要な画面では useLoginRequired() フックを使用。
+非ログイン状態なら自動でモーダルを表示し、ログイン画面へ誘導。
+
+```typescript
+const { user } = useLoginRequired(); // ログイン必須
+```
+
+**重要な判断基準**: 
+- HTML は「表現機能は保ちながら危険要素は排除」  
+- URL は「内部リダイレクトは許可、外部はすべて遮断」  
+- 認証は「あいまいな状態を作らない」  
 
 ---
 
-### 2️⃣ セッションイベントバス
+### 2️⃣ 通知機能 — デバイス・状態の責務分離
 
-**課題**: どのコンポーネントからでも 401 発生時に一貫した処理が必要。
+**基本方針**: 「デバイス文脈と状態の性格に応じて責務を分ける」
 
-**アプローチ** (3 ステップ):
-```typescript
-// Step 1: Axios インターセプタで発火
-window.dispatchEvent(new Event('auth:logout'));
+#### UI フロー の分離
+- **PC**: AlarmBell アイコン → クリック → AlarmPanel（ポップオーバー）で最新通知を確認
+- **モバイル**: AlarmBell アイコン → クリック → `/alarms` ページへ遷移し、全通知を無限スクロールで閲覧
 
-// Step 2: 型定義 (src/shared/lib/events.ts)
-interface WindowEventMap { 'auth:logout': Event; }
+反応型 CSS で同じコンポーネントを無理やり調整するのではなく、デバイスごとに最適な UX フローを選択。
 
-// Step 3: AuthProvider で受信 (src/app/providers/AuthProvider.tsx)
-window.addEventListener('auth:logout', () => { openModal(); redirect('/login'); });
-```
+#### データ管理の分離
+**未読フラグ** (`hasUnread`, Query Key: `['alarms', 'has-unread']`):
+- 目的: バッジの赤点表示用
+- ポーリング: 30 秒間隔（軽量なため頻繁に確認）
+- 用途: クイックチェック
 
-**トレードオフ**:
-- ✅ インターセプタ - UI 間の直接依存を排除
-- ❌ グローバルイベント依存でテストが難しい
+**通知一覧** (`items`, Query Key: `['alarms', 'items', ...]`):
+- 目的: 詳細内容表示用
+- ポーリング: なし（重い無限スクロールクエリ）
+- 用途: ページ内容表示
+
+#### 状態管理層の分離
+- **UI 状態** (パネル開閉): `useAlarmStore` (Zustand)  
+  → ローカルUI の見た目変化のみ
+- **サーバー状態** (通知データ): TanStack Query  
+  → 実際のサーバー原本データ
+
+**重要な判断基準**:  
+- 同じ機能でも PC/モバイル の使用方式が異なれば、UI フロー自体を分ける
+- ビッグデータと フラグを同じ Query で管理するな → ポーリング設定が競合してメモリ낭비
 
 ---
 
-### 3️⃣ 優先度モーダル
+### 3️⃣ 認証フロー — 状態一貫性の確保
 
-**課題**: 複数のモーダルが同時発生した場合の順序制御。
+**基本方針**: 「認証 UX は曖昧にできない」
 
-**アプローチ** (`src/app/store/useModalStore.ts`):
+#### 問題の層構造
+最初は「セッション期限切れモーダルが不安定」に見えたが、実際には複数の問題が絡んでいた:
+1. イベント重複購読 → 同一イベントを複数ハンドラで受け取る
+2. 401 分岐の不明確さ → 一般エラーと認証エラーの区別がない
+3. CSRF クッキー問題 → nip.io ドメインでのセッション不一致
+4. キャッシュ更新戦略 → ログアウト後もキャッシュが残ってヘッダーが曖昧に見える
+
+#### 修正アプローチ
+
+**401 エラーの明確な分岐** (`src/shared/api/apiClient.ts`):
 ```typescript
-openModal(modal) {
-  if (modal.priority <= current?.priority) return; // 低優先度を破棄
+if (error.response?.status === 401) {
+  checkAuth(); // 実際の auth 状態を再確認 → 認証必要フローへ
+} else {
+  // 一般エラー処理
 }
 ```
 
-**トレードオフ**:
-- ✅ 重要なモーダルが必ず表示される
-- ❌ 低優先度モーダルが消える（ユーザーには知らせられない）
-
----
-
-### 4️⃣ 無限スクロール (通知)
-
-**課題**: 100 件以上の通知をページネーションボタンで操作するのは不便。
-
-**アプローチ** (`src/widgets/alarm-panel/ui/AlarmsPageClient.tsx`):
+**ログアウト後のキャッシュ確定**:
 ```typescript
-const observer = new IntersectionObserver(([entry]) => {
-  if (entry.isIntersecting && hasNextPage) fetchNextPage();
-});
-observer.observe(sentinelRef.current!);
+// queryClient.clear() ではなく
+setQueryData(['auth', 'me'], null);
+// → ヘッダーが即座に「非ログイン」状態を反映
 ```
 
-**トレードオフ**:
-- ✅ スクロールと同時に自然なローディング
-- ❌ ブラウザバック時のスクロール位置復元が不完全 (Next.js Router の制約)
+**重要な判断基準**:
+- 非ログイン状態の人に「セッション期限切れ」モーダルを表示してはいけない
+- ログアウト後はヘッダーも即座に非ログイン状態を反映する
+- 401 は一般的な取得失敗ではなく「ログイン必要」フローとして処理する
 
 ---
 
-## ⚡ パフォーマンス / UX
+### 4️⃣ パフォーマンス — 画面性格に応じた戦略
 
-| 項目 | 実装 | 効果 | 検証方法 |
-|---|---|---|---|
-| **React Compiler** | `babel-plugin-react-compiler` | 自動メモ化（再レンダリングスキップ） | React DevTools の Profiler でレンダリング回数を確認 |
-| **Suspense + Error Boundary** | `useSuspenseQuery` + `ErrorBoundaryWrapper` | 宣言的ローディング/エラー処理 | ネットワーク遅延シミュレーション（Chrome DevTools Throttling）で表示確認 |
-| **Query Caching** | `staleTime: 60s` | 不要な API 再呼び出し防止 | Network タブで 1 分以内の再遷移時にリクエストが発生しないことを確認 |
-| **HTML Sanitize** | `DOMPurify` | XSS 防止 (Tiptap HTML 出力) | `<script>alert(1)</script>` 入力 → レンダリング後に実行されないことを確認 |
-| **Code Splitting** | Next.js 標準 (App Router) | ページ別 JS バンドル最小化 | `next build` 後の `.next/analyze` で各ページの JS サイズを確認 |
+**基本方針**: 「性能問題を単一の原因で判断しない」
 
----
+#### 掲示板の最新性確保
+**課題**: いいね/コメントが他ユーザー操作で変化するのに反映が遅れる
 
-## ✅ 品質 & ビルド
+**選択理由**:
+- `staleTime: 0` → キャッシュを即座に古いと判定
+- `refetchOnWindowFocus: true` → タブ復帰/再進入時に自動更新  
+- `placeholderData` → 完全に空の画面を回避
 
-### ESLint
-```bash
-npm run lint
-```
-設定: `eslint.config.mjs` (flat config v9)
-- `eslint-config-next/core-web-vitals`
-- `eslint-config-next/typescript`
+prefetch も検討しましたが、掲示板のように実時間性が重要な画面では 
+「ロード体感は落ちるが最新データ」を優先しました。
 
-### Prettier
-未設定（チーム規模では ESLint ルールのみで十分）。
+#### 画像表示の最適化
+**初期の仮説**: 画像が大きいから遅い → WebP 変換で解決  
+**再定義**: 不十分と判明 → 原因を分層
+1. **原本サイズ削減** (WebP + リサイズ)
+   - hero 画像のような大容量ファイルを WebP に変換
+   - 実際のレンダリングサイズに合わせてリサイズ (例: 1.3MB → 200KB)
+2. **静的資産の再利用性強化** (Cache-Control)
+   - `/assets/`、ロゴなど自頻繁に変更されないファイルに `max-age=31536000, immutable` を設定
+   - 再訪問時の再検証リクエスト回避 → ブラウザキャッシュを即座に再利用
 
-
-### ビルド
-```bash
-npm run build   # 型チェック + lint + SSR ビルド
-npm run dev     # 開発サーバー (localhost:3000)
-```
-
+**重要な判断基準**:
+- 初回訪問の速度だけで判断したら画像最適化は不完全
+- 「初回ダウンロード削減」と「再訪問時の再ダウンロード削減」を分けて解決
 ---
 
 ## 🚀 ローカル起動
