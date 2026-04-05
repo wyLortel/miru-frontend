@@ -9,7 +9,7 @@
 - [サービス概要](#-サービス概要)
 - [Demo](#-demo)
 - [主な機能](#-主な機能-ユーザー価値ベース)
-- [Tech Stack](#-tech-stack-選定理由付き)
+- [Tech Stack](#-tech-stack)
 - [アーキテクチャ](#-アーキテクチャ)
 - [フォルダ構成](#-フォルダ構成-責務付き)
 - [重要実装ポイント](#-重要実装ポイント)
@@ -70,21 +70,21 @@
 
 ---
 
-## 🛠️ Tech Stack (選定理由付き)
+## 🛠️ Tech Stack
 
-| 分野 | ライブラリ | バージョン | 選定理由 |
-|---|---|---|---|
-| **Framework** | Next.js | 16.1.6 | CSR・SSR を柔軟に使い分けられる。静的ページは SSR で SEO を確保しつつ、インタラクティブな操作は CSR で対応 |
-| **Language** | TypeScript | ^5 | 型安全性、チーム開発の効率化 |
-| **Styling** | Tailwind CSS + shadcn/ui | v4.1.18 + ^3.8.4 | クラス名でスタイルが一目でわかり、修正箇所をすぐ特定できる。shadcn/ui との組み合わせでデザインの統一性を保ちながら、素早く UI を構築できる |
-| **Server State** | TanStack Query | ^5.90 | キャッシュ/無効化の細粒度制御、staleTime/gcTime 戦略で API 呼び出し最小化 |
-| **Client State** | Zustand | ^5.0 | グローバル UI 状態（モーダル/通知パネル）を最小限に管理、ボイラープレート不要 |
-| **HTTP Client** | Axios | ^1.13 | インターセプタによる CSRF/401 処理の一元化 |
-| **Rich Text** | Tiptap | ^3.19 | 自己分析サービスの特性上、構造化テキスト編集が必要 |
-| **HTML セキュリティ** | DOMPurify | ^3.3 | XSS 防止（dangerouslySetInnerHTML 使用時） |
-| **Date Util** | dayjs | ^1.11 | 軽量な日時操作 |
-| **Error Boundary** | react-error-boundary | ^6.1 | Suspense と組み合わせた宣言的エラー処理 |
-| **Icons** | lucide-react | ^0.564 | Tailwind と統合、tree-shakeable |
+| 分野 | ライブラリ |
+|---|---|
+| **Framework** | Next.js |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS + shadcn/ui |
+| **Server State** | TanStack Query |
+| **Client State** | Zustand |
+| **HTTP Client** | Axios |
+| **Rich Text** | Tiptap |
+| **HTML セキュリティ** | DOMPurify |
+| **Date Util** | dayjs |
+| **Error Boundary** | react-error-boundary |
+| **Icons** | lucide-react |
 
 
 ---
