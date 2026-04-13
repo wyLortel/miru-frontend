@@ -1,10 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Bell } from 'lucide-react';
 import { useAuth } from '@/entities/auth/useAuth';
 import { useHasUnreadQuery } from '@/entities/alarm/model/useHasUnreadQuery';
-import { useAlarmStore } from '@/app/store/useAlarmStore';
 import { useIsMobile } from '@/shared/lib/hooks/useIsMobile';
 import { useLoginRequired } from '@/shared/lib/hooks/useLoginRequired';
 import {
@@ -15,10 +15,10 @@ import {
 import { AlarmPanel } from '../../../widgets/alarm-panel/ui/AlarmPanel';
 
 export const AlarmBell = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { data: user } = useAuth();
   const { data: unreadData } = useHasUnreadQuery();
-  const { isOpen, togglePanel, closePanel } = useAlarmStore();
   const isMobile = useIsMobile();
   const { checkAuth } = useLoginRequired();
 
@@ -34,13 +34,11 @@ export const AlarmBell = () => {
     }
 
     // PC: just toggle panel (show login message if not logged in)
-    togglePanel();
+    setIsOpen(!isOpen);
   };
 
   return (
-    <Popover open={isOpen && !isMobile} onOpenChange={(open) => {
-      if (!open) closePanel();
-    }}>
+    <Popover open={isOpen && !isMobile} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <button
           onClick={handleBellClick}
