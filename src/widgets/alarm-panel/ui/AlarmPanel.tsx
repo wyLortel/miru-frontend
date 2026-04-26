@@ -67,12 +67,15 @@ function AlarmPanelContent() {
 
       {/* Footer */}
       {hasItems && (
-        <div className="border-t border-gray-200 p-3">
+        <div className="border-t border-gray-200 px-4 py-3">
+          <p className="text-xs text-gray-500 text-center mb-2">
+            패널에서는 10개까지만 표시됩니다.
+          </p>
           <Link
             href="/alarms"
             className="text-xs text-blue-600 hover:text-blue-700 font-medium block text-center"
           >
-            전체 알람 보기
+            더 많은 알람 보기
           </Link>
         </div>
       )}
