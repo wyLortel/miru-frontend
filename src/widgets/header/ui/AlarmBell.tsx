@@ -55,7 +55,7 @@ export const AlarmBell = () => {
       {/* PC only - conditional JSX rendering to avoid CSS conflicts */}
       {!isMobile && (
         <PopoverContent className="w-auto p-0 border-gray-200" align="end">
-          {user ? <AlarmPanel /> : <p className="p-4 text-sm text-gray-500">로그인 후 알람을 확인할 수 있습니다</p>}
+          {user ? <AlarmPanel onNavigateToFull={() => setIsOpen(false)} /> : <p className="p-4 text-sm text-gray-500">로그인 후 알람을 확인할 수 있습니다</p>}
         </PopoverContent>
       )}
     </Popover>
