@@ -117,18 +117,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener(APP_EVENTS.TERMS_REQUIRED, handler);
   }, [router, pathname]);
 
-  // 403 "정지된 계정" → 모달 표시 (이동 없음)
+  // 403 "정지된 계정" → 모달 표시 + 로그아웃
   useEffect(() => {
     const handler = () => {
+      qc.setQueryData(['auth', 'me'], null);
       openModal({
         title: '정지된 계정입니다',
-        description: '계정이 정지되어 해당 기능을 이용할 수 없습니다.',
-        buttons: [{ label: '확인', onClick: closeModal }],
+        description: '계정이 정지되어 서비스를 이용할 수 없습니다.',
+        priority: MODAL_PRIORITY.HIGH,
+        buttons: [
+          {
+            label: '확인',
+            onClick: () => {
+              closeModal();
+              router.push('/login');
+            },
+          },
+        ],
       });
     };
     window.addEventListener(APP_EVENTS.ACCOUNT_BANNED, handler);
     return () => window.removeEventListener(APP_EVENTS.ACCOUNT_BANNED, handler);
-  }, [openModal, closeModal]);
+  }, [qc, openModal, closeModal, router]);
 
   return <>{children}</>;
 }
